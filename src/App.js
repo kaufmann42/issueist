@@ -13,7 +13,12 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import Github from 'github-api';
+import GitHub, {Issue} from 'github-api';
+
+// basic auth
+const gh = new GitHub({
+  token: 'TOKEN HERE',
+});
 
 const styles = theme => ({
   root: {
@@ -38,19 +43,31 @@ const styles = theme => ({
 
 class App extends Component {
   state = {
-    repositories: [
-      'lodash',
-      'create-react-app',
-      'material-ui',
-    ],
+    repositories: [],
     selectedRepository: '',
     title: '',
     body: '',
   }
 
-  handleChange = event => {
+  handleChange = (event) => {
     this.setState({ [event.target.name]: event.target.value });
-  };
+  }
+
+  submit = () => {
+    const user = this.state.selectedRepository.split('/')[0];
+    const repo = this.state.selectedRepository.split('/')[1];
+    const issue = gh.getIssues(user, repo);
+    const {title, body} = this.state;
+    issue.createIssue({
+      title,
+      body,
+    }).then(console.log).catch(window.alert);
+  }
+
+  componentDidMount() {
+    const user = gh.getUser();
+    user.listRepos().then(({data}) => data.map(d => d.full_name)).then(repositories => this.setState({repositories}))
+  }
 
   render() {
     const { classes } = this.props;
@@ -110,7 +127,7 @@ class App extends Component {
                 variant="filled"
               />
             </FormControl>
-            <Button fullWidth variant="contained" color="primary" className={classes.button}>
+            <Button onClick={this.submit} fullWidth variant="contained" color="primary" className={classes.button}>
               Submit
             </Button>
           </div>
