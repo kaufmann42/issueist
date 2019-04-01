@@ -12,11 +12,6 @@ import Button from '@material-ui/core/Button';
 import GitHub from 'github-api';
 import AppBar from '../../components/app-bar';
 
-// basic auth
-const gh = new GitHub({
-  token: 'TOKEN HERE',
-});
-
 const styles = theme => ({
   root: {
     flexGrow: 1,
@@ -52,7 +47,7 @@ class App extends Component {
   submit = () => {
     const user = this.state.selectedRepository.split('/')[0];
     const repo = this.state.selectedRepository.split('/')[1];
-    const issue = gh.getIssues(user, repo);
+    const issue = this.gh.getIssues(user, repo);
     const {title, body} = this.state;
     issue.createIssue({
       title,
@@ -61,7 +56,12 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const user = gh.getUser();
+    // basic auth
+    this.gh = new GitHub({
+      token: this.props.token,
+    });
+
+    const user = this.gh.getUser();
     user.listRepos().then(({data}) => data.map(d => d.full_name)).then(repositories => this.setState({repositories}))
   }
 
@@ -126,6 +126,7 @@ class App extends Component {
 
 App.propTypes = {
   classes: PropTypes.object.isRequired,
+  token: PropTypes.string.isRequired,
 };
 
 export default withStyles(styles)(App);

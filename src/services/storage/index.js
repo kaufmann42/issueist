@@ -7,3 +7,11 @@
 export const store = (key, value) => {
   window.localStorage.setItem(key, value);
 };
+
+/**
+ * Gets an item from safe storage. Can only be accessed by the application.
+ * @return {String} item
+ */
+export const retrieve = (key) => {
+  return window.localStorage.getItem(key);
+}
