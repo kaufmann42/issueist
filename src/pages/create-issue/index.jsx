@@ -10,7 +10,6 @@ import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import GitHub from 'github-api';
-import AppBar from '../../components/app-bar';
 
 const styles = theme => ({
   root: {
@@ -69,7 +68,6 @@ class App extends Component {
     const { classes } = this.props;
     return (
       <div className={classes.root}>
-        <AppBar/>
         <div style={{padding: '20px'}}>
           <Typography variant="body2" color="inherit">
             Save your thoughts straight to your Github repositories issues.

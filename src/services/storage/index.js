@@ -15,3 +15,10 @@ export const store = (key, value) => {
 export const retrieve = (key) => {
   return window.localStorage.getItem(key);
 }
+
+/**
+ * Removes all traces of the applications storage.
+ */
+export const deleteStorage = () => {
+  window.localStorage.clear();
+}

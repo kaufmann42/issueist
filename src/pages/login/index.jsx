@@ -1,26 +1,19 @@
 import React from 'react';
-import AppBar from '../../components/app-bar';
+import PropTypes from 'prop-types';
 import GitHubLogin from '../../components/github-login-button';
-import { store } from '../../services/storage';
 import { Typography } from '@material-ui/core';
 
 export default class LoginPage extends React.Component {
-  onSuccess = (response) => {
-    fetch(`http://localhost:9999/authenticate/${response.code}`).then(function(response) {
-      return response.json();
-    }).then(res => store('token', res.token));
-  }
-
-  onFailure = (response) => {
-    console.log(response)
+  static propTypes = {
+    onSuccess: PropTypes.func.isRequired,
+    onFailure: PropTypes.func.isRequired,
   }
 
   render() {
     return (
       <React.Fragment>
-        <AppBar/>
-        <div style={{display: 'flex', flexDirection: 'column', minHeight: '400px', justifyContent: 'center'}}>
-          <GitHubLogin scopes={'repo'} clientId={process.env.REACT_APP_GITHUB_CLIENT_ID} onSuccess={this.onSuccess} onFailure={this.onFailure}/>
+        <div style={{display: 'flex', flexDirection: 'column', minHeight: '400px', justifyContent: 'center', padding: '20px'}}>
+          <GitHubLogin scopes={'repo'} clientId={process.env.REACT_APP_GITHUB_CLIENT_ID} onSuccess={this.props.onSuccess} onFailure={this.props.onFailure}/>
           <Typography variant="body1" align="center">
             You need to authorize access to your Github repositories before you can use this application
           </Typography>

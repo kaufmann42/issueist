@@ -30,21 +30,22 @@ const styles = theme => ({
 export class CustomAppBar extends React.Component {
   static propTypes = {
     classes: PropTypes.object.isRequired,
+    onClickMenu: PropTypes.func,
   }
 
   render() {
     const {classes} = this.props;
     return (
       <AppBar position="static">
-          <Toolbar>
-            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" color="inherit" className={classes.grow}>
-              Issueist
-            </Typography>
-          </Toolbar>
-        </AppBar>
+        <Toolbar>
+          {Boolean(this.props.onClickMenu) && <IconButton onClick={() => this.props.onClickMenu()} className={classes.menuButton} color="inherit" aria-label="Menu">
+            <MenuIcon />
+          </IconButton>}
+          <Typography variant="h6" color="inherit" className={classes.grow}>
+            Issueist
+          </Typography>
+        </Toolbar>
+      </AppBar>
     );
   }
 }
