@@ -4,7 +4,7 @@ import CreateIssuePage from './pages/create-issue';
 
 export default class App extends Component {
   state = {
-    isLoggedIn: true,
+    isLoggedIn: false,
   }
   render() {
     return (
