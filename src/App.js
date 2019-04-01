@@ -11,7 +11,14 @@ export default class App extends Component {
   onSuccess = (response) => {
     fetch(`http://localhost:9999/authenticate/${response.code}`).then(function(response) {
       return response.json();
-    }).then(res => store('token', res.token));
+    })
+    .then(res => {
+      store('token', res.token);
+      return res.token;
+    })
+    .then(token => {
+      this.setState({token})
+    });
   }
 
   onFailure = (response) => {
