@@ -44,7 +44,7 @@ and that's it! The GIF below shows an example of this process.
 
 ## Contributing
 
-See [the contributing file](contributing.md)!
+See [the contributing file](./CONTRIBUTING.md)!
 
 PRs accepted.
 
