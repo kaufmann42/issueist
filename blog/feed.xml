@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+    <channel>
+        <title>Issueist Blog</title>
+        <link>https://issueist.dev/blog</link>
+        <description>The best place to stay up-to-date with the latest Issueist news and events.</description>
+        <lastBuildDate>Fri, 12 Apr 2019 06:00:00 GMT</lastBuildDate>
+        <docs>http://blogs.law.harvard.edu/tech/rss</docs>
+        <generator>Feed for Node.js</generator>
+        <image>
+            <title>Issueist Blog</title>
+            <url>https://issueist.dev/img/issueist.svg</url>
+            <link>https://issueist.dev/blog</link>
+        </image>
+        <copyright>Copyright © 2019 Issueist</copyright>
+        <item>
+            <title><![CDATA[Introducing Issuest]]></title>
+            <link>https://issueist.dev/blog/2019/04/12/Introducing-Issueist.html</link>
+            <guid>https://issueist.dev/blog/2019/04/12/Introducing-Issueist.html</guid>
+            <pubDate>Fri, 12 Apr 2019 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>Improving your productivity is a lifelong journey. I find myself in a constant cycle of buy-and-try with different methods in the hopes of doing so. As a developer I find most of my time on <a href="https://github.com/">Github</a>. By doing so I've developed techniques to improve my productivity on the platform, with GH issues lying at the core of those. That's when I realized I needed a tool like Issueist.</p>
+]]></description>
+        </item>
+    </channel>
+</rss>
