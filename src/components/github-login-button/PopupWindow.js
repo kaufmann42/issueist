@@ -21,6 +21,7 @@ class PopupWindow {
   poll() {
     this.promise = new Promise((resolve, reject) => {
       this._iid = window.setInterval(() => {
+        console.log('Running poll')
         try {
           const popup = this.window;
 

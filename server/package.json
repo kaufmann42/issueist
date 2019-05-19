@@ -1,0 +1,33 @@
+{
+  "name": "gatekeeper",
+  "description": "Enables client-side applications to dance OAuth with Github.",
+  "url": "http://github.com/prose/gatekeeper",
+  "keywords": [
+    "github",
+    "oauth"
+  ],
+  "scripts": {
+    "start": "node index.js",
+    "test": "node tests/server.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/prose/gatekeeper"
+  },
+  "author": "Michael Aufreiter",
+  "license": "MIT",
+  "contributors": [],
+  "dependencies": {
+    "express": "~4.16.2"
+  },
+  "engines": {
+    "node": "~6.11.1"
+  },
+  "main": "index",
+  "version": "0.1.0",
+  "devDependencies": {
+    "nock": "^9.1.4",
+    "supertest": "^3.0.0",
+    "tape": "^4.8.0"
+  }
+}
