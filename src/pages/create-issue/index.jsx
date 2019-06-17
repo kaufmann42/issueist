@@ -13,6 +13,7 @@ import Button from '@material-ui/core/Button';
 import GitHub from 'github-api';
 import { CircularProgress } from '@material-ui/core';
 
+import { store, retrieve } from '../../services/storage';
 import NewRepoDialog from './new-repo-dialog.jsx'
 
 const styles = theme => ({
@@ -41,12 +42,16 @@ const styles = theme => ({
   },
 });
 
-function writeToLocalStorage(state) {
-  window.localStorage.setItem('issueistFormData', JSON.stringify({
+function writeStateToStorage(state) {
+  return store('issueistFormData', {
     selectedRepository: state.selectedRepository,
     title: state.title,
     body: state.body
-  }))
+  })
+}
+
+function retrieveStateFromStorage() {
+  return retrieve('issueistFormData')
 }
 
 class App extends Component {
@@ -67,7 +72,7 @@ class App extends Component {
         if (this.state.timer) {
           window.clearTimeout(this.state.timer)
         }
-        let timer = window.setTimeout(() => writeToLocalStorage(state), 200)
+        let timer = window.setTimeout(() => writeStateToStorage(state), 100)
         this.setState({
           timer
         })
@@ -101,21 +106,21 @@ class App extends Component {
         error: null,
         body: '',
       });
-      window.localStorage.setItem('issueistFormData', JSON.stringify({
+
+      writeStateToStorage({
         selectedRepository: this.state.selectedRepository
-      }));
+      });
 
       this.setLoading(false);
     }).catch(() => {
-      this.setState({error: 'Unknown error. Try again later.'}); 
+      this.setState({error: 'Unknown error. Try again later.'});
       this.setLoading(false)
     });
   }
 
   componentDidMount() {
-    this.setState({
-      ...JSON.parse(window.localStorage.getItem('issueistFormData'))
-    })
+    retrieveStateFromStorage()
+      .then((state) => this.setState({...state}))
     // basic auth
     this.gh = new GitHub({
       token: this.props.token,
