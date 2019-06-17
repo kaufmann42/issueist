@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import LoginPage from './pages/login';
 import CreateIssuePage from './pages/create-issue';
-import { store, retrieve } from './services/storage';
+import { store, retrieve, deleteStorage } from './services/storage';
 import { List, ListItem, ListItemIcon, ListItemText, Drawer } from '@material-ui/core';
 import HelpIcon from '@material-ui/icons/Help';
 import LogOutIcon from '@material-ui/icons/PowerSettingsNew';
@@ -26,7 +26,7 @@ export default class App extends Component {
   }
 
   logout = () => {
-    window.localStorage.clear();
+    deleteStorage();
     this.setState({token: null})
   }
 
@@ -51,7 +51,7 @@ export default class App extends Component {
             <ListItemIcon><HelpIcon/></ListItemIcon>
             <ListItemText primary={'About'} />
           </ListItem>
-          {this.state.token && 
+          {this.state.token &&
           <ListItem onClick={this.logout} button>
             <ListItemIcon><LogOutIcon/></ListItemIcon>
             <ListItemText primary={'Logout'} />
