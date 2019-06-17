@@ -47,7 +47,7 @@ export default class App extends Component {
     const sideList = (
       <div>
         <List>
-          <ListItem button>
+          <ListItem onClick={() => window.open('https://kaufmann42.github.io/issueist/', '_blank')} button>
             <ListItemIcon><HelpIcon/></ListItemIcon>
             <ListItemText primary={'About'} />
           </ListItem>
