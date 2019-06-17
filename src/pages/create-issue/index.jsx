@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { debounce } from 'debounce'
 import {withStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -12,6 +11,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
 import GitHub from 'github-api';
+import { CircularProgress } from '@material-ui/core';
 
 import NewRepoDialog from './new-repo-dialog.jsx'
 
@@ -29,10 +29,19 @@ const styles = theme => ({
   selectEmpty: {
     marginTop: theme.spacing.unit * 2,
   },
+  wrapper: {
+    position: 'relative',
+  },
+  buttonProgress: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
+  },
 });
 
 function writeToLocalStorage(state) {
-  console.log('writing to ls: ', state)
   window.localStorage.setItem('issueistFormData', JSON.stringify({
     selectedRepository: state.selectedRepository,
     title: state.title,
@@ -47,10 +56,11 @@ class App extends Component {
     title: '',
     body: '',
     timer: '',
+    error: null,
+    loading: false,
   }
 
   handleChange = (event) => {
-    const name = event.target.name
     this.setState({ [event.target.name]: event.target.value },
       () => {
         const state = this.state
@@ -58,22 +68,48 @@ class App extends Component {
           window.clearTimeout(this.state.timer)
         }
         let timer = window.setTimeout(() => writeToLocalStorage(state), 200)
-        console.log('timer is: ', timer)
         this.setState({
           timer
         })
       });
   }
 
+  setLoading = (loading) => {
+    this.setState({loading});
+  }
+
   submit = () => {
+    this.setLoading(true);
+    const {title, body} = this.state;
     const user = this.state.selectedRepository.split('/')[0];
     const repo = this.state.selectedRepository.split('/')[1];
+    if (!title || !repo) {
+      this.setState({
+        error: 'Title & repo required to submit issue.',
+      });
+      this.setLoading(false)
+      return;
+    }
+
     const issue = this.gh.getIssues(user, repo);
-    const {title, body} = this.state;
     issue.createIssue({
       title,
       body,
-    }).then(console.log).catch(window.alert);
+    }).then(() => {
+      this.setState({
+        title: '',
+        error: null,
+        body: '',
+      });
+      window.localStorage.setItem('issueistFormData', JSON.stringify({
+        selectedRepository: this.state.selectedRepository
+      }));
+
+      this.setLoading(false);
+    }).catch(() => {
+      this.setState({error: 'Unknown error. Try again later.'}); 
+      this.setLoading(false)
+    });
   }
 
   componentDidMount() {
@@ -141,6 +177,7 @@ class App extends Component {
               <Select
                 value={this.state.selectedRepository}
                 onChange={this.handleChange}
+                disabled={this.state.loading}
                 inputProps={{
                   name: 'selectedRepository',
                   id: 'selectedRepository-simple',
@@ -155,6 +192,7 @@ class App extends Component {
                 id="filled-title"
                 label="Issue Title"
                 name="title"
+                disabled={this.state.loading}
                 value={this.state.title}
                 onChange={this.handleChange}
                 margin="normal"
@@ -168,6 +206,7 @@ class App extends Component {
                 name="body"
                 multiline
                 rows="8"
+                disabled={this.state.loading}
                 value={this.state.body}
                 onChange={this.handleChange}
                 margin="normal"
@@ -175,9 +214,20 @@ class App extends Component {
                 variant="filled"
               />
             </FormControl>
-            <Button onClick={this.submit} fullWidth variant="contained" color="primary" className={classes.button}>
-              Submit
-            </Button>
+            <div className={classes.wrapper}>
+              <Button
+                variant="contained"
+                color="primary"
+                disabled={this.state.loading}
+                onClick={this.submit}
+                className={classes.button}
+                fullWidth
+              >
+                Submit
+              </Button>
+              {this.state.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+            </div>
+            <Typography color="error">{this.state.error}</Typography>
           </div>
         </div>
       </div>
