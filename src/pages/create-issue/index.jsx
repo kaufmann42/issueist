@@ -10,6 +10,7 @@ import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import GitHub from 'github-api';
+import { CircularProgress } from '@material-ui/core';
 
 const styles = theme => ({
   root: {
@@ -25,6 +26,16 @@ const styles = theme => ({
   selectEmpty: {
     marginTop: theme.spacing.unit * 2,
   },
+  wrapper: {
+    position: 'relative',
+  },
+  buttonProgress: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
+  },
 });
 
 class App extends Component {
@@ -33,21 +44,46 @@ class App extends Component {
     selectedRepository: '',
     title: '',
     body: '',
+    error: null,
+    loading: false,
   }
 
   handleChange = (event) => {
     this.setState({ [event.target.name]: event.target.value });
   }
 
+  setLoading = (loading) => {
+    this.setState({loading});
+  }
+
   submit = () => {
+    this.setLoading(true);
+    const {title, body} = this.state;
     const user = this.state.selectedRepository.split('/')[0];
     const repo = this.state.selectedRepository.split('/')[1];
+    if (!title || !repo) {
+      this.setState({
+        error: 'Title & repo required to submit issue.',
+      });
+      this.setLoading(false)
+      return;
+    }
+
     const issue = this.gh.getIssues(user, repo);
-    const {title, body} = this.state;
     issue.createIssue({
       title,
       body,
-    }).then(console.log).catch(window.alert);
+    }).then(() => {
+      this.setState({
+        title: '',
+        error: null,
+        body: '',
+      });
+      this.setLoading(false);
+    }).catch(() => {
+      this.setState({error: 'Unknown error. Try again later.'}); 
+      this.setLoading(false)
+    });
   }
 
   componentDidMount() {
@@ -74,6 +110,7 @@ class App extends Component {
               <Select
                 value={this.state.selectedRepository}
                 onChange={this.handleChange}
+                disabled={this.state.loading}
                 inputProps={{
                   name: 'selectedRepository',
                   id: 'selectedRepository-simple',
@@ -88,6 +125,7 @@ class App extends Component {
                 id="filled-title"
                 label="Issue Title"
                 name="title"
+                disabled={this.state.loading}
                 value={this.state.title}
                 onChange={this.handleChange}
                 margin="normal"
@@ -101,6 +139,7 @@ class App extends Component {
                 name="body"
                 multiline
                 rows="8"
+                disabled={this.state.loading}
                 value={this.state.body}
                 onChange={this.handleChange}
                 margin="normal"
@@ -108,9 +147,20 @@ class App extends Component {
                 variant="filled"
               />
             </FormControl>
-            <Button onClick={this.submit} fullWidth variant="contained" color="primary" className={classes.button}>
-              Submit
-            </Button>
+            <div className={classes.wrapper}>
+              <Button
+                variant="contained"
+                color="primary"
+                disabled={this.state.loading}
+                onClick={this.submit}
+                className={classes.button}
+                fullWidth
+              >
+                Submit
+              </Button>
+              {this.state.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+            </div>
+            <Typography color="error">{this.state.error}</Typography>
           </div>
         </div>
       </div>
