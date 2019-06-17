@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import {withStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -9,7 +9,10 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+
 import GitHub from 'github-api';
+
+import NewRepoDialog from './new-repo-dialog.jsx'
 
 const styles = theme => ({
   root: {
@@ -60,18 +63,46 @@ class App extends Component {
       token: this.props.token,
     });
 
+    this.fetchUserRepos()
+  }
+
+  fetchUserRepos() {
     const user = this.gh.getUser();
-    user.listRepos().then(({data}) => data.map(d => d.full_name)).then(repositories => this.setState({repositories}))
+    return user.listRepos()
+      .then(({data}) => {
+        const repositories = data.map(d => d.full_name);
+        this.setState({
+          repositories
+        });
+        return repositories;
+      });
+  }
+
+  createNewTodoRepo = name => {
+    const user = this.gh.getUser();
+    return user.createRepo({name})
+      .then(({data}) => {
+        const newRepoName = data.full_name
+        this.setState({
+          repositories: this.state.repositories.concat(newRepoName),
+          selectedRepository: newRepoName
+        })
+      });
   }
 
   render() {
     const { classes } = this.props;
+
     return (
       <div className={classes.root}>
         <div style={{padding: '20px'}}>
           <Typography variant="body2" color="inherit">
             Save your thoughts straight to your Github repositories issues.
           </Typography>
+          <NewRepoDialog
+            createRepo={this.createNewTodoRepo}
+            buttonStyle={{float: 'right'}}
+          />
           <div className={classes.root}>
             <FormControl fullWidth className={classes.formControl}>
               <InputLabel htmlFor="selectedRepository-simple">Select Repo</InputLabel>
