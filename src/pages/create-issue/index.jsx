@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import { debounce } from 'debounce'
 import {withStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -30,16 +31,38 @@ const styles = theme => ({
   },
 });
 
+function writeToLocalStorage(state) {
+  console.log('writing to ls: ', state)
+  window.localStorage.setItem('issueistFormData', JSON.stringify({
+    selectedRepository: state.selectedRepository,
+    title: state.title,
+    body: state.body
+  }))
+}
+
 class App extends Component {
   state = {
     repositories: [],
     selectedRepository: '',
     title: '',
     body: '',
+    timer: '',
   }
 
   handleChange = (event) => {
-    this.setState({ [event.target.name]: event.target.value });
+    const name = event.target.name
+    this.setState({ [event.target.name]: event.target.value },
+      () => {
+        const state = this.state
+        if (this.state.timer) {
+          window.clearTimeout(this.state.timer)
+        }
+        let timer = window.setTimeout(() => writeToLocalStorage(state), 200)
+        console.log('timer is: ', timer)
+        this.setState({
+          timer
+        })
+      });
   }
 
   submit = () => {
@@ -54,6 +77,9 @@ class App extends Component {
   }
 
   componentDidMount() {
+    this.setState({
+      ...JSON.parse(window.localStorage.getItem('issueistFormData'))
+    })
     // basic auth
     this.gh = new GitHub({
       token: this.props.token,
