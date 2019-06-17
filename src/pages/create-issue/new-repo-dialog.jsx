@@ -13,7 +13,7 @@ import {
 import { withStyles } from '@material-ui/core/styles';
 import { blue } from '@material-ui/core/colors';
 
-const styles = theme => ({
+const styles = (theme) => ({
   wrapper: {
     margin: theme.spacing.unit,
     position: 'relative',
@@ -35,10 +35,10 @@ class NewRepoDialog extends Component {
     name: '',
   }
 
-  onChangeRepoName = e => {
+  onChangeRepoName = (event) => {
     this.setState({
       error: false,
-      name: e.target.value,
+      name: event.target.value,
     });
   }
 

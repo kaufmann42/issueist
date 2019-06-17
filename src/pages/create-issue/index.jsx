@@ -62,6 +62,10 @@ class App extends Component {
     this.fetchUserRepos()
   }
 
+  /**
+   * Fetches github repositories anc sets this.state.repositories to the results.
+   * @return {Promise<Array>} Github Repositories
+   */
   fetchUserRepos() {
     const user = this.gh.getUser();
     return user.listRepos()
@@ -74,7 +78,12 @@ class App extends Component {
       });
   }
 
-  createNewTodoRepo = name => {
+  /**
+   * Creates a new repository and sets it to the selected repository to post new issues
+   * to.
+   * @return {Promise<string>} name of new repository
+   */
+  createNewTodoRepo = (name) => {
     const user = this.gh.getUser();
     return user.createRepo({name})
       .then(({data}) => {
@@ -83,6 +92,7 @@ class App extends Component {
           repositories: this.state.repositories.concat(newRepoName),
           selectedRepository: newRepoName
         })
+        return newRepoName;
       });
   }
 
