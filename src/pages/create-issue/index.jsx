@@ -64,7 +64,7 @@ class App extends Component {
 
   /**
    * Fetches github repositories anc sets this.state.repositories to the results.
-   * @return {Promise<Array>} Github Repositories
+   * @return {Promise<Array<Object>>} Github Repositories
    */
   fetchUserRepos() {
     const user = this.gh.getUser();

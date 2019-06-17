@@ -47,7 +47,12 @@ class NewRepoDialog extends Component {
   }
 
   handleClose = () => {
-    this.setState({open: false});
+    this.setState({
+      open: false,
+      loading: false,
+      error: false,
+      name: ''
+    });
   }
 
   handleCreate = () => {
@@ -60,11 +65,6 @@ class NewRepoDialog extends Component {
     this.setState({loading: true})
     this.props.createRepo(this.state.name)
       .then(() => {
-        this.setState({
-          loading: false,
-          error: false,
-          name: ''
-        });
         this.handleClose();
       })
   }
