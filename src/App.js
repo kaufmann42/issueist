@@ -36,7 +36,9 @@ export default class App extends Component {
 
   componentDidMount() {
     console.log('setting state from onComp')
-    this.setState({token: retrieve('token')});
+
+    retrieve('token')
+      .then((token) => this.setState({token}))
   }
 
   toggleDrawer = (open) => {
