@@ -22,10 +22,6 @@ const styles = theme => ({
     marginLeft: -12,
     marginRight: 20,
   },
-  formControl: {
-    margin: theme.spacing.unit,
-    minWidth: 120,
-  },
   selectEmpty: {
     marginTop: theme.spacing.unit * 2,
   },
@@ -73,7 +69,7 @@ class App extends Component {
             Save your thoughts straight to your Github repositories issues.
           </Typography>
           <div className={classes.root}>
-            <FormControl fullWidth className={classes.formControl}>
+            <FormControl fullWidth>
               <InputLabel htmlFor="selectedRepository-simple">Select Repo</InputLabel>
               <Select
                 value={this.state.selectedRepository}
@@ -87,7 +83,7 @@ class App extends Component {
               </Select>
               <FormHelperText>The repository to post the issue to.</FormHelperText>
             </FormControl>
-            <FormControl fullWidth className={classes.formControl}>
+            <FormControl fullWidth>
               <TextField
                 id="filled-title"
                 label="Issue Title"
@@ -98,7 +94,7 @@ class App extends Component {
                 variant="filled"
               />
             </FormControl>
-            <FormControl fullWidth className={classes.formControl}>
+            <FormControl fullWidth>
               <TextField
                 id="filled-multiline-flexible"
                 label="Issue Body"
