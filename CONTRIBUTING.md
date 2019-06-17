@@ -35,6 +35,7 @@ This applicattion is a [create-react-app](https://github.com/facebook/create-rea
 ```
 .
 ├── docs (documentation for docusaurus [see ./website])
+├── extension (browser extension files)
 ├── img (github banner image)
 ├── public (build directory)
 ├── src (front end application source)
