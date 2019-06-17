@@ -64,7 +64,7 @@ This applicattion is a [create-react-app](https://github.com/facebook/create-rea
 
 ## Testing
 
-This codebase has the intention of keeping components presentational, meaning that they are really only responsible for presenting somethin got the DOM with minimal logic inside them. Instead we utilize services (in the `./src` dir) to handle complex logic. For each added service, unit tests as well as documentation should be standard. With that said, this is an open source project worked on using volunteer hours, so there's no need to go crazy.
+This codebase has the intention of keeping components presentational, meaning that they are really only responsible for presenting something to the DOM with minimal logic inside them. Instead we utilize services (in the `./src` dir) to handle complex logic. For each added service, unit tests as well as documentation should be standard. With that said, this is an open source project worked on using volunteer hours, so there's no need to go crazy.
 
 ## PR Checklist
 
