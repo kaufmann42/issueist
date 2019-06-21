@@ -65,25 +65,28 @@ class App extends Component {
     loading: false,
   }
 
-  handleChange = (event) => {
-    this.setState({ [event.target.name]: event.target.value },
-      () => {
-        const state = this.state
-        if (this.state.timer) {
-          window.clearTimeout(this.state.timer)
-        }
-        let timer = window.setTimeout(() => writeStateToStorage(state), 100)
-        this.setState({
-          timer
-        })
-      });
+  componentDidMount() {
+    // First update the component's state with any todo data that was
+    // persisted in the store.
+    retrieveStateFromStorage()
+      .then((state) => this.setState({...state}))
+
+    // basic auth
+    this.gh = new GitHub({
+      token: this.props.token,
+    });
+
+    this.fetchUserRepos()
   }
 
+  /**
+   * Helper function to update the state's `loading` property.
+   */
   setLoading = (loading) => {
     this.setState({loading});
   }
 
-  submit = () => {
+  submit = async () => {
     this.setLoading(true);
     const {title, body} = this.state;
     const user = this.state.selectedRepository.split('/')[0];
@@ -96,11 +99,13 @@ class App extends Component {
       return;
     }
 
-    const issue = this.gh.getIssues(user, repo);
-    issue.createIssue({
-      title,
-      body,
-    }).then(() => {
+    try {
+      const issue = this.gh.getIssues(user, repo);
+      await issue.createIssue({
+        title,
+        body,
+      })
+
       this.setState({
         title: '',
         error: null,
@@ -112,21 +117,10 @@ class App extends Component {
       });
 
       this.setLoading(false);
-    }).catch(() => {
+    } catch (e) {
       this.setState({error: 'Unknown error. Try again later.'});
       this.setLoading(false)
-    });
-  }
-
-  componentDidMount() {
-    retrieveStateFromStorage()
-      .then((state) => this.setState({...state}))
-    // basic auth
-    this.gh = new GitHub({
-      token: this.props.token,
-    });
-
-    this.fetchUserRepos()
+    }
   }
 
   /**
@@ -160,6 +154,24 @@ class App extends Component {
           selectedRepository: newRepoName
         })
         return newRepoName;
+      });
+  }
+
+  /**
+   * Handles updating the state when todo title, text, or selectedRepository changes.
+   * This includes interacting with the storage service to persist this data.
+   */
+  handleChange = (event) => {
+    this.setState({ [event.target.name]: event.target.value },
+      () => {
+        const state = this.state
+        if (this.state.timer) {
+          window.clearTimeout(this.state.timer)
+        }
+        let timer = window.setTimeout(() => writeStateToStorage(state), 100)
+        this.setState({
+          timer
+        })
       });
   }
 
