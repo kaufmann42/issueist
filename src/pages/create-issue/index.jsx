@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import {withStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -9,8 +9,12 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+
 import GitHub from 'github-api';
 import { CircularProgress } from '@material-ui/core';
+
+import { store, retrieve } from '../../services/storage';
+import NewRepoDialog from './new-repo-dialog.jsx'
 
 const styles = theme => ({
   root: {
@@ -38,25 +42,51 @@ const styles = theme => ({
   },
 });
 
+function writeStateToStorage(state) {
+  return store('issueistFormData', {
+    selectedRepository: state.selectedRepository,
+    title: state.title,
+    body: state.body
+  })
+}
+
+function retrieveStateFromStorage() {
+  return retrieve('issueistFormData')
+}
+
 class App extends Component {
   state = {
     repositories: [],
     selectedRepository: '',
     title: '',
     body: '',
+    timer: '',
     error: null,
     loading: false,
   }
 
-  handleChange = (event) => {
-    this.setState({ [event.target.name]: event.target.value });
+  componentDidMount() {
+    // First update the component's state with any todo data that was
+    // persisted in the store.
+    retrieveStateFromStorage()
+      .then((state) => this.setState({...state}))
+
+    // basic auth
+    this.gh = new GitHub({
+      token: this.props.token,
+    });
+
+    this.fetchUserRepos()
   }
 
+  /**
+   * Helper function to update the state's `loading` property.
+   */
   setLoading = (loading) => {
     this.setState({loading});
   }
 
-  submit = () => {
+  submit = async () => {
     this.setLoading(true);
     const {title, body} = this.state;
     const user = this.state.selectedRepository.split('/')[0];
@@ -69,41 +99,97 @@ class App extends Component {
       return;
     }
 
-    const issue = this.gh.getIssues(user, repo);
-    issue.createIssue({
-      title,
-      body,
-    }).then(() => {
+    try {
+      const issue = this.gh.getIssues(user, repo);
+      await issue.createIssue({
+        title,
+        body,
+      })
+
       this.setState({
         title: '',
         error: null,
         body: '',
       });
+
+      writeStateToStorage({
+        selectedRepository: this.state.selectedRepository
+      });
+
       this.setLoading(false);
-    }).catch(() => {
-      this.setState({error: 'Unknown error. Try again later.'}); 
+    } catch (e) {
+      this.setState({error: 'Unknown error. Try again later.'});
       this.setLoading(false)
-    });
+    }
   }
 
-  componentDidMount() {
-    // basic auth
-    this.gh = new GitHub({
-      token: this.props.token,
-    });
-
+  /**
+   * Fetches github repositories and sets `this.state.repositories` to the results.
+   * @return {Promise<Array<Object>>} Github Repositories
+   */
+  fetchUserRepos() {
     const user = this.gh.getUser();
-    user.listRepos().then(({data}) => data.map(d => d.full_name)).then(repositories => this.setState({repositories}))
+    return user.listRepos()
+      .then(({data}) => {
+        const repositories = data.map(d => d.full_name);
+        this.setState({
+          repositories
+        });
+        return repositories;
+      });
+  }
+
+  /**
+   * Creates a new repository and sets it to the selected repository to post new issues
+   * to.
+   * @return {Promise<string>} name of new repository
+   */
+  createNewTodoRepo = (name) => {
+    const user = this.gh.getUser();
+    return user.createRepo({name})
+      .then(({data}) => {
+        const newRepoName = data.full_name
+        this.setState({
+          repositories: this.state.repositories.concat(newRepoName),
+          selectedRepository: newRepoName
+        })
+        return newRepoName;
+      });
+  }
+
+  /**
+   * Handles updating the state when todo title, text, or selectedRepository changes.
+   * This includes interacting with the storage service to persist this data.
+   */
+  handleChange = (event) => {
+    this.setState({ [event.target.name]: event.target.value },
+      () => {
+        const state = this.state
+        // If we already have a debounced `writeStateToStorage` function call waiting,
+        // cancel it (`window.clearTimeout`) and create a new timeout.
+        if (this.state.timer) {
+          window.clearTimeout(this.state.timer)
+        }
+        let timer = window.setTimeout(() => writeStateToStorage(state), 100)
+        this.setState({
+          timer
+        })
+      });
   }
 
   render() {
     const { classes } = this.props;
+
     return (
       <div className={classes.root}>
         <div style={{padding: '20px'}}>
           <Typography variant="body2" color="inherit">
             Save your thoughts straight to your Github repositories issues.
           </Typography>
+          <NewRepoDialog
+            createRepo={this.createNewTodoRepo}
+            buttonStyle={{float: 'right'}}
+          />
           <div className={classes.root}>
             <FormControl fullWidth>
               <InputLabel htmlFor="selectedRepository-simple">Select Repo</InputLabel>
