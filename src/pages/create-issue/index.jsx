@@ -124,7 +124,7 @@ class App extends Component {
   }
 
   /**
-   * Fetches github repositories anc sets this.state.repositories to the results.
+   * Fetches github repositories and sets `this.state.repositories` to the results.
    * @return {Promise<Array<Object>>} Github Repositories
    */
   fetchUserRepos() {
@@ -165,6 +165,8 @@ class App extends Component {
     this.setState({ [event.target.name]: event.target.value },
       () => {
         const state = this.state
+        // If we already have a debounced `writeStateToStorage` function call waiting,
+        // cancel it (`window.clearTimeout`) and create a new timeout.
         if (this.state.timer) {
           window.clearTimeout(this.state.timer)
         }

@@ -55,7 +55,7 @@ class NewRepoDialog extends Component {
     });
   }
 
-  handleCreate = () => {
+  handleCreate = async () => {
     if (this.state.name === '') {
       this.setState({
         error: 'Please enter a repository name'
@@ -63,10 +63,17 @@ class NewRepoDialog extends Component {
       return;
     }
     this.setState({loading: true})
-    this.props.createRepo(this.state.name)
-      .then(() => {
-        this.handleClose();
+
+    try {
+      await this.props.createRepo(this.state.name)
+      this.handleClose();
+    } catch (e) {
+      console.log(`Error creating repo: ${e}`)
+      this.setState({
+        error: 'Failed to create a new repo',
+        loading: false
       })
+    }
   }
 
   render() {
