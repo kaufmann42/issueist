@@ -1,6 +1,6 @@
 {
   "name": "Issueist",
-  "version": "1.0",
+  "version": "1.1",
   "manifest_version": 2,
   "browser_action": {
       "default_popup": "index.html",
@@ -13,6 +13,6 @@
     "page": "background.html"
   },
   "description": "Create and upload GH issues right from your browser.",
-  "homepage_url": "https://github.com/kaufmann42/issueist",
+  "homepage_url": "https://issueist.dev",
   "content_security_policy": "script-src 'self' 'sha256-5As4+3YpY62+l38PsxCEkjB1R4YtyktBtRScTJ3fyLU='; object-src 'self'"
 }
