@@ -15,7 +15,7 @@ export default class App extends Component {
 
   onSuccess = (response) => {
     console.log('successful response')
-    fetch(`http://localhost:9999/authenticate/${response.code}`).then(function(response) {
+    fetch(`https://issueist-gatekeeper.wolfpak.now.sh/?code=${response.code}`).then(function(response) {
       return response.json();
     })
     .then((res) => {
