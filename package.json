@@ -20,5 +20,11 @@
   },
   "eslintConfig": {
     "extends": "react-app"
+  },
+  "devDependencies": {
+    "cpy": "^7.3.0",
+    "find-and-replace": "^1.0.2",
+    "rmfr": "^2.0.0",
+    "zip-a-folder": "0.0.8"
   }
 }
