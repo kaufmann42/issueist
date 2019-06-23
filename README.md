@@ -25,7 +25,7 @@ I use Github to store a lot of my ideas, projects (software & other), and everyt
 
 ## Install
 
-This application is hosted on the [Chrome Webstore](). It can be installed with just a few clicks using [this link]().
+This application is hosted on the [Chrome Webstore](https://chrome.google.com/webstore/detail/issueist/eiekclnnglajcfmddidpcipngednfena). It can be installed with just a few clicks using [this link](https://chrome.google.com/webstore/detail/issueist/eiekclnnglajcfmddidpcipngednfena).
 
 ## Usage
 
