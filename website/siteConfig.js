@@ -24,7 +24,7 @@ const siteConfig = {
   title: 'Issueist', // Title for your website.
   tagline: 'Post Github issues from anywhere',
   url: 'https://kaufmann42.github.io', // Your website URL
-  baseUrl: '/issueist/', // Base URL for your project */
+  baseUrl: '/', // Base URL for your project */
   // For github.io type URLs, you would set the url and baseUrl like:
   //   url: 'https://facebook.github.io',
   //   baseUrl: '/test-site/',
@@ -98,9 +98,12 @@ const siteConfig = {
   // Show documentation's last update time.
   enableUpdateTime: true,
 
+  // https://docusaurus.io/docs/en/site-config.html#cname-string
+  cname: 'https://issueist.dev',
+
   // You may provide arbitrary config keys to be used as needed by your
   // template. For example, if you need your repo's URL...
-    repoUrl: 'https://github.com/kaufmann42/issueist',
+  repoUrl: 'https://github.com/kaufmann42/issueist',
 };
 
 module.exports = siteConfig;
