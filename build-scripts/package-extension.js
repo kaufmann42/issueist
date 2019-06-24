@@ -19,7 +19,7 @@
   await find
     .src('./extension/index.html')
     .dest('./extension-build/index.html')
-    .replace({ localhost: production })
+    .replace({ [localhost]: production })
     .complete((txt) => {
       console.log('Pointing iframe in index.html to production server.');
     })
@@ -28,7 +28,7 @@
   await find
     .src('./extension/background.html')
     .dest('./extension-build/background.html')
-    .replace({ localhost: production })
+    .replace({ [localhost]: production })
     .complete((txt) => {
       console.log('Pointing iframe in background.html to production server.');
     })
