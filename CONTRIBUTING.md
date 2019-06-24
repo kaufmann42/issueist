@@ -14,11 +14,12 @@ This applicattion is a [create-react-app](https://github.com/facebook/create-rea
 
 ### Running the application
 
-1. `npm run start`
+1. `npm start`
 
-### Running the docs
+### Running the website
 
-1. `npm run docs`
+1. `cd website`
+2. `npm start`
 
 ### Testing
 
@@ -28,6 +29,10 @@ This applicattion is a [create-react-app](https://github.com/facebook/create-rea
 ### Building for production
 
 1. `npm run build`
+
+### Packaging the extension for the google chrome store
+
+1. `npm run package-extension`
 
 
 ## Directory Structure

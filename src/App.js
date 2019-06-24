@@ -27,13 +27,13 @@ export default class App extends Component {
         throw new Error(res.error);
       }
       store('token', res.token);
-      this.setState({token: res.token});
+      this.setState({token: res.token, loading: false});
     })
     .catch((err) => {
       console.error(err);
+      this.setState({loading: false});
       toast.error('There was an error authenticating. Check console for details.');
     });
-    this.setState({loading: false});
   }
 
   logout = () => {
