@@ -35,6 +35,8 @@ function authenticate(code, cb) {
     code: code
   });
 
+  log('Using data', data);
+
   var reqOptions = {
     host: config.oauth_host,
     port: config.oauth_port,

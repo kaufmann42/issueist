@@ -15,10 +15,12 @@ export default class App extends Component {
 
   onSuccess = (response) => {
     console.log('successful response')
-    fetch(`https://issueist-gatekeeper.wolfpak.now.sh/?code=${response.code}`).then(function(response) {
+    fetch(`${process.env.REACT_APP_SERVER_URL}?code=${response.code}`).then(function(response) {
+      console.log('successfully polled server');
       return response.json();
     })
     .then((res) => {
+      debugger;
       store('token', res.token);
       this.setState({token: res.token});
     })
