@@ -11,10 +11,13 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
 import GitHub from 'github-api';
-import { CircularProgress } from '@material-ui/core';
+import moment from 'moment';
+import {CircularProgress, } from '@material-ui/core';
 
-import { store, retrieve } from '../../services/storage';
-import NewRepoDialog from './new-repo-dialog.jsx'
+import {store, retrieve} from '../../services/storage';
+import {delayIssue} from '../../services/delayed-processor';
+import DelayIssue from './delay-issue';
+import NewRepoDialog from './new-repo-dialog';
 
 const styles = theme => ({
   root: {
@@ -31,7 +34,8 @@ const styles = theme => ({
     marginTop: theme.spacing.unit * 2,
   },
   wrapper: {
-    position: 'relative',
+    paddingTop: '20px',
+       position: 'relative',
   },
   buttonProgress: {
     position: 'absolute',
@@ -43,48 +47,45 @@ const styles = theme => ({
 });
 
 function writeStateToStorage(state) {
-  return store('issueistFormData', {
-    selectedRepository: state.selectedRepository,
-    title: state.title,
-    body: state.body
-  })
+  return store('issueistFormData', state)
 }
 
 function retrieveStateFromStorage() {
-  return retrieve('issueistFormData')
+  return retrieve('issueistFormData');
 }
 
 class App extends Component {
   state = {
     repositories: [],
     selectedRepository: '',
+    delayIssueDate: '',
+    delayIssueChecked: false,
     title: '',
     body: '',
     timer: '',
     error: null,
     loading: false,
-  }
+  };
 
   componentDidMount() {
     // First update the component's state with any todo data that was
     // persisted in the store.
-    retrieveStateFromStorage()
-      .then((state) => this.setState({...state}))
+    retrieveStateFromStorage().then(state => this.setState({...state}));
 
     // basic auth
     this.gh = new GitHub({
       token: this.props.token,
     });
 
-    this.fetchUserRepos()
+    this.fetchUserRepos();
   }
 
   /**
    * Helper function to update the state's `loading` property.
    */
-  setLoading = (loading) => {
+  setLoading = loading => {
     this.setState({loading});
-  }
+  };
 
   submit = async () => {
     this.setLoading(true);
@@ -95,33 +96,41 @@ class App extends Component {
       this.setState({
         error: 'Title & repo required to submit issue.',
       });
-      this.setLoading(false)
+      this.setLoading(false);
       return;
     }
 
     try {
       const issue = this.gh.getIssues(user, repo);
-      await issue.createIssue({
-        title,
-        body,
-      })
+
+      if (this.state.delayIssueChecked) {
+        console.log('delayig issue with date: ', this.state.delayIssueDate)
+        await delayIssue(issue, {title, body, date: this.state.delayIssueDate})
+      } else {
+        await issue.createIssue({
+          title,
+          body,
+        });
+      }
 
       this.setState({
         title: '',
-        error: null,
         body: '',
+        delayIssueChecked: false,
+        delayIssueDate: moment().format('YYYY-MM-DDTHH:mm'),
+        error: null,
       });
 
       writeStateToStorage({
-        selectedRepository: this.state.selectedRepository
+        selectedRepository: this.state.selectedRepository,
       });
 
       this.setLoading(false);
     } catch (e) {
       this.setState({error: 'Unknown error. Try again later.'});
-      this.setLoading(false)
+      this.setLoading(false);
     }
-  }
+  };
 
   /**
    * Fetches github repositories and sets `this.state.repositories` to the results.
@@ -129,14 +138,13 @@ class App extends Component {
    */
   fetchUserRepos() {
     const user = this.gh.getUser();
-    return user.listRepos()
-      .then(({data}) => {
-        const repositories = data.map(d => d.full_name);
-        this.setState({
-          repositories
-        });
-        return repositories;
+    return user.listRepos().then(({data}) => {
+      const repositories = data.map(d => d.full_name);
+      this.setState({
+        repositories,
       });
+      return repositories;
+    });
   }
 
   /**
@@ -144,41 +152,48 @@ class App extends Component {
    * to.
    * @return {Promise<string>} name of new repository
    */
-  createNewTodoRepo = (name) => {
+  createNewTodoRepo = name => {
     const user = this.gh.getUser();
-    return user.createRepo({name})
-      .then(({data}) => {
-        const newRepoName = data.full_name
-        this.setState({
-          repositories: this.state.repositories.concat(newRepoName),
-          selectedRepository: newRepoName
-        })
-        return newRepoName;
+    return user.createRepo({name}).then(({data}) => {
+      const newRepoName = data.full_name;
+      this.setState({
+        repositories: this.state.repositories.concat(newRepoName),
+        selectedRepository: newRepoName,
       });
+      return newRepoName;
+    });
+  };
+
+  handleChangeCheckDelayIssue = event => {
+    this.handleUpdateStateAndStorage(event.target.name, event.target.checked)
   }
 
   /**
    * Handles updating the state when todo title, text, or selectedRepository changes.
    * This includes interacting with the storage service to persist this data.
    */
-  handleChange = (event) => {
-    this.setState({ [event.target.name]: event.target.value },
-      () => {
-        const state = this.state
-        // If we already have a debounced `writeStateToStorage` function call waiting,
-        // cancel it (`window.clearTimeout`) and create a new timeout.
-        if (this.state.timer) {
-          window.clearTimeout(this.state.timer)
-        }
-        let timer = window.setTimeout(() => writeStateToStorage(state), 100)
-        this.setState({
-          timer
-        })
+  handleChange = event => {
+    this.handleUpdateStateAndStorage(event.target.name, event.target.value);
+  };
+
+  handleUpdateStateAndStorage = (name, value) => {
+    this.setState({[name]: value}, () => {
+      const state = this.state;
+      // If we already have a debounced `writeStateToStorage` function call waiting,
+      // cancel it (`window.clearTimeout`) and create a new timeout.
+      if (this.state.timer) {
+        window.clearTimeout(this.state.timer);
+      }
+      let timer = window.setTimeout(() => writeStateToStorage(state), 100);
+      this.setState({
+        timer,
       });
+    });
+
   }
 
   render() {
-    const { classes } = this.props;
+    const {classes} = this.props;
 
     return (
       <div className={classes.root}>
@@ -192,7 +207,9 @@ class App extends Component {
           />
           <div className={classes.root}>
             <FormControl fullWidth>
-              <InputLabel htmlFor="selectedRepository-simple">Select Repo</InputLabel>
+              <InputLabel htmlFor="selectedRepository-simple">
+                Select Repo
+              </InputLabel>
               <Select
                 value={this.state.selectedRepository}
                 onChange={this.handleChange}
@@ -200,11 +217,16 @@ class App extends Component {
                 inputProps={{
                   name: 'selectedRepository',
                   id: 'selectedRepository-simple',
-                }}
-              >
-                {this.state.repositories.map((repo, index) => <MenuItem key={index} value={repo}>{repo}</MenuItem>)}
+                }}>
+                {this.state.repositories.map((repo, index) => (
+                  <MenuItem key={index} value={repo}>
+                    {repo}
+                  </MenuItem>
+                ))}
               </Select>
-              <FormHelperText>The repository to post the issue to.</FormHelperText>
+              <FormHelperText>
+                The repository to post the issue to.
+              </FormHelperText>
             </FormControl>
             <FormControl fullWidth>
               <TextField
@@ -233,6 +255,13 @@ class App extends Component {
                 variant="filled"
               />
             </FormControl>
+
+            <DelayIssue
+              isChecked={this.state.delayIssueChecked}
+              date={this.state.delayIssueDate}
+              handleChangeChecked={this.handleChangeCheckDelayIssue}
+              handleChange={this.handleChange} />
+
             <div className={classes.wrapper}>
               <Button
                 variant="contained"
@@ -240,11 +269,15 @@ class App extends Component {
                 disabled={this.state.loading}
                 onClick={this.submit}
                 className={classes.button}
-                fullWidth
-              >
+                fullWidth>
                 Submit
               </Button>
-              {this.state.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+              {this.state.loading && (
+                <CircularProgress
+                  size={24}
+                  className={classes.buttonProgress}
+                />
+              )}
             </div>
             <Typography color="error">{this.state.error}</Typography>
           </div>

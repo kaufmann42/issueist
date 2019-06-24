@@ -74,7 +74,7 @@ export default class App extends Component {
       </div>
     );
     return (
-      <div style={{width: '400px', height: '600px'}}>
+      <div style={{height: '600px'}}>
         <AppBar onClickMenu={() => this.toggleDrawer(true)}/>
         {!this.state.token ? <LoginPage loading={this.state.loading} onSuccess={this.onSuccess} onFailure={this.onFailure}/> : <CreateIssuePage token={this.state.token}/>}
         <Drawer open={this.state.open} onClose={() => this.toggleDrawer(false)}>
