@@ -6,25 +6,34 @@ import { List, ListItem, ListItemIcon, ListItemText, Drawer } from '@material-ui
 import HelpIcon from '@material-ui/icons/Help';
 import LogOutIcon from '@material-ui/icons/PowerSettingsNew';
 import AppBar from './components/app-bar';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default class App extends Component {
   state = {
     token: null,
     open: false,
+    loading: false,
   }
 
   onSuccess = (response) => {
-    console.log('successful response')
+    this.setState({loading: true});
+    console.log('successful response');
     fetch(`${process.env.REACT_APP_SERVER_URL}?code=${response.code}`).then(function(response) {
-      console.log('successfully polled server');
       return response.json();
     })
     .then((res) => {
-      debugger;
+      if (res.error) {
+        throw new Error(res.error);
+      }
       store('token', res.token);
       this.setState({token: res.token});
     })
-    .catch(console.error);
+    .catch((err) => {
+      console.error(err);
+      toast.error('There was an error authenticating. Check console for details.');
+    });
+    this.setState({loading: false});
   }
 
   logout = () => {
@@ -33,14 +42,15 @@ export default class App extends Component {
   }
 
   onFailure = (response) => {
-    console.log(response)
+    toast.error('There was an error authenticating. Check console for details.');
+    console.error(response);
   }
 
   componentDidMount() {
-    console.log('setting state from onComp')
+    console.log('setting state from onComp');
 
     retrieve('token')
-      .then((token) => this.setState({token}))
+      .then((token) => this.setState({token}));
   }
 
   toggleDrawer = (open) => {
@@ -66,7 +76,7 @@ export default class App extends Component {
     return (
       <div style={{width: '400px', height: '600px'}}>
         <AppBar onClickMenu={() => this.toggleDrawer(true)}/>
-        {!this.state.token ? <LoginPage onSuccess={this.onSuccess} onFailure={this.onFailure}/> : <CreateIssuePage token={this.state.token}/>}
+        {!this.state.token ? <LoginPage loading={this.state.loading} onSuccess={this.onSuccess} onFailure={this.onFailure}/> : <CreateIssuePage token={this.state.token}/>}
         <Drawer open={this.state.open} onClose={() => this.toggleDrawer(false)}>
           <div
             tabIndex={0}
@@ -77,6 +87,7 @@ export default class App extends Component {
             {sideList}
           </div>
         </Drawer>
+        <ToastContainer position={toast.POSITION.BOTTOM_LEFT} />
       </div>
       );
   }
