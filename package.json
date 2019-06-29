@@ -25,7 +25,7 @@
   },
   "devDependencies": {
     "cpy": "^7.3.0",
-    "find-and-replace": "^1.0.2",
+    "replace-in-file": "^4.1.0",
     "rmfr": "^2.0.0",
     "zip-a-folder": "0.0.8"
   },
