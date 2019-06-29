@@ -9,30 +9,16 @@
     fs.mkdirSync(dir);
   }
 
-  var find = require("find-and-replace");
+  var replace = require("replace-in-file");
   var cpy = require('cpy');
 
-  await cpy(['./extension/Icon.png', './extension/manifest.json'], './extension-build/')
+  await cpy('./extension/*.*', './extension-build/')
     .then((res) => console.log('Copied over files to extension build.'))
-    .catch((err) => console.log());
+    .catch((err) => console.error(err));
 
-  await find
-    .src('./extension/index.html')
-    .dest('./extension-build/index.html')
-    .replace({ [localhost]: production })
-    .complete((txt) => {
-      console.log('Pointing iframe in index.html to production server.');
-    })
-    .error((err) => console.error(err));
-
-  await find
-    .src('./extension/background.html')
-    .dest('./extension-build/background.html')
-    .replace({ [localhost]: production })
-    .complete((txt) => {
-      console.log('Pointing iframe in background.html to production server.');
-    })
-    .error((err) => console.error(err));
+  await replace({files: './extension-build/*.html', from: localhost, to: production})
+    .then((res) => console.log('Pointed html files to production server.'))
+    .catch((err) => console.error(err));
 
   const { zip } = require('zip-a-folder');
 
