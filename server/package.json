@@ -21,9 +21,6 @@
     "axios": "^0.19.0",
     "express": "~4.16.2"
   },
-  "engines": {
-    "node": "~6.11.1"
-  },
   "main": "index",
   "version": "0.1.0",
   "devDependencies": {
