@@ -15,7 +15,7 @@ import moment from 'moment';
 import {CircularProgress, } from '@material-ui/core';
 
 import {store, retrieve} from '../../services/storage';
-import {delayIssue} from '../../services/delayed-processor';
+import {startPollingDelayedIssues, stopPollingDelayedIssues, delayIssue} from '../../services/delayed-processor';
 import DelayIssue from './delay-issue';
 import NewRepoDialog from './new-repo-dialog';
 
@@ -58,7 +58,7 @@ class App extends Component {
   state = {
     repositories: [],
     selectedRepository: '',
-    delayIssueDate: '',
+    delayIssueDate: moment().format('YYYY-MM-DDTHH:mm'),
     delayIssueChecked: false,
     title: '',
     body: '',
@@ -78,6 +78,8 @@ class App extends Component {
     });
 
     this.fetchUserRepos();
+    // Now that the user is logged in, start polling for any delayed issues they may have
+    startPollingDelayedIssues(this.gh);
   }
 
   /**
@@ -104,8 +106,7 @@ class App extends Component {
       const issue = this.gh.getIssues(user, repo);
 
       if (this.state.delayIssueChecked) {
-        console.log('delayig issue with date: ', this.state.delayIssueDate)
-        await delayIssue(issue, {title, body, date: this.state.delayIssueDate})
+        await delayIssue({user, repo, title, body, date: this.state.delayIssueDate})
       } else {
         await issue.createIssue({
           title,
@@ -189,7 +190,11 @@ class App extends Component {
         timer,
       });
     });
+  }
 
+  componentWillUnmount() {
+    // Turn off the delayed issue poller
+    stopPollingDelayedIssues();
   }
 
   render() {

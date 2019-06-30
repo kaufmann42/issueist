@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {
   Checkbox,
@@ -7,31 +7,28 @@ import {
   TextField,
 } from '@material-ui/core';
 
-class DelayIssue extends Component {
-
-
-  render() {
-    return (
+const DelayIssue = ({ isChecked, handleChange, handleChangeChecked, date }) =>
+    (
       <>
         <FormControl fullWidth>
           <FormControlLabel
             control={
               <Checkbox
-                checked={this.props.isChecked}
-                onChange={this.props.handleChangeChecked}
+                checked={isChecked}
+                onChange={handleChangeChecked}
                 name="delayIssueChecked"
                 color="primary"
               />
             }
             label="Delay Issue"
           />
-          {this.props.isChecked && (
+          {isChecked && (
             <TextField
               id="datetime-local"
-              label="Next appointment"
+              label="Publication date"
               type="datetime-local"
-              onChange={this.props.handleChange}
-              defaultValue={this.props.date}
+              onChange={handleChange}
+              defaultValue={date}
               name="delayIssueDate"
               InputLabelProps={{
                 shrink: true,
@@ -41,11 +38,11 @@ class DelayIssue extends Component {
         </FormControl>
       </>
     );
-  }
-}
 
 DelayIssue.propTypes = {
   isChecked: PropTypes.bool,
-  handleChange: PropTypes.func
+  handleChange: PropTypes.func,
+  handleChangeChecked: PropTypes.func,
+  date: PropTypes.string,
 }
 export default DelayIssue;
