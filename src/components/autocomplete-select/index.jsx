@@ -103,6 +103,15 @@ Control.propTypes = {
 };
 
 function Option(props) {
+  const {
+    // Ignored for performance
+    // https://github.com/JedWatson/react-select/issues/3128
+    onMouseMove,
+    onMouseOver,
+
+    ...innerProps
+  } = props.innerProps;
+
   return (
     <MenuItem
       ref={props.innerRef}
@@ -110,7 +119,7 @@ function Option(props) {
       style={{
         fontWeight: props.isSelected ? 500 : 400,
       }}
-      {...props.innerProps}
+      {...innerProps}
     >
       {props.children}
     </MenuItem>
