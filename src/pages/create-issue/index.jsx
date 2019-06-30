@@ -28,7 +28,7 @@ const styles = theme => ({
     marginRight: 20,
   },
   selectEmpty: {
-    marginTop: theme.spacing.unit * 2,
+    marginTop: theme.spacing(2),
   },
   wrapper: {
     position: 'relative',

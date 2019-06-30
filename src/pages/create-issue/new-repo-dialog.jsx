@@ -15,7 +15,7 @@ import { blue } from '@material-ui/core/colors';
 
 const styles = (theme) => ({
   wrapper: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(),
     position: 'relative',
   },
   buttonProgress: {
