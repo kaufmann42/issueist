@@ -35,7 +35,7 @@ const styles = theme => ({
   },
   wrapper: {
     paddingTop: '20px',
-       position: 'relative',
+    position: 'relative',
   },
   buttonProgress: {
     position: 'absolute',
