@@ -15,6 +15,7 @@ app.get('*', async (req, res) => {
   /** @type {String} */
   const code = req.query.code;
   try {
+    console.log(`Authenticating Code: ${code.substr(0, 3)}...`);
     const response = await axios.post(
       'https://github.com/login/oauth/access_token',
       {},
@@ -25,7 +26,11 @@ app.get('*', async (req, res) => {
           code,
         },
       });
-    console.log(`Authenticating Code: ${code.substr(0, 3)}...`);
+    if (response.data.error) {
+      console.debug('Response:\n', response);
+      throw new Error('Detected error response from Github');
+    }
+    console.log(`Recieved Access Token Code: ${response.data.access_token.substr(0, 3)}...`);
     res.status(response.status).send({ token: response.data.access_token });
   } catch (err) {
     console.error('Something went wrong!', err);

@@ -2,6 +2,13 @@
   "version": 2,
   "name": "issueist-gatekeeper",
   "builds": [
-    { "src": "index.js", "use": "@now/node" }
-  ]
+    {
+      "src": "index.js",
+      "use": "@now/node"
+    }
+  ],
+  "env": {
+    "OAUTH_CLIENT_ID": "@oauth_client_id",
+    "OAUTH_CLIENT_SECRET": "@oauth_client_secret"
+  }
 }
