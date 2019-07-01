@@ -38,7 +38,6 @@ For local development, you'll need to create your own OAuth app on Github.com. T
    ```console
    REACT_APP_SERVER_URL=http://localhost:8080/
    REACT_APP_GITHUB_CLIENT_ID=
-   REACT_APP_GITHUB_CLIENT_SECRET=
    ```
 6. At the end of lines 2 and 3, add the **Client ID** and **Client Secret** respectively.
 7. Save the file.
