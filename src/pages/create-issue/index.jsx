@@ -2,11 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
@@ -14,6 +10,7 @@ import GitHub from 'github-api';
 import { CircularProgress } from '@material-ui/core';
 
 import { store, retrieve } from '../../services/storage';
+import AutocompleteSelect from '../../components/autocomplete-select';
 import NewRepoDialog from './new-repo-dialog.jsx'
 
 const styles = theme => ({
@@ -28,7 +25,7 @@ const styles = theme => ({
     marginRight: 20,
   },
   selectEmpty: {
-    marginTop: theme.spacing.unit * 2,
+    marginTop: theme.spacing(2),
   },
   wrapper: {
     position: 'relative',
@@ -192,19 +189,15 @@ class App extends Component {
           />
           <div className={classes.root}>
             <FormControl fullWidth>
-              <InputLabel htmlFor="selectedRepository-simple">Select Repo</InputLabel>
-              <Select
+              <AutocompleteSelect
+                name="selectedRepository"
                 value={this.state.selectedRepository}
+                options={this.state.repositories}
                 onChange={this.handleChange}
                 disabled={this.state.loading}
-                inputProps={{
-                  name: 'selectedRepository',
-                  id: 'selectedRepository-simple',
-                }}
-              >
-                {this.state.repositories.map((repo, index) => <MenuItem key={index} value={repo}>{repo}</MenuItem>)}
-              </Select>
-              <FormHelperText>The repository to post the issue to.</FormHelperText>
+                placeholder="Select a repository"
+                helperText="The repository to post the issue to."
+              />
             </FormControl>
             <FormControl fullWidth>
               <TextField

@@ -39,7 +39,7 @@ For local development, you'll need to create your own OAuth app on Github.com. T
    REACT_APP_SERVER_URL=http://localhost:8080/
    REACT_APP_GITHUB_CLIENT_ID=
    ```
-6. At the end of lines 2 and 3, add the **Client ID** and **Client Secret** respectively.
+6. At the end of line 2, add the **Client ID** from above.
 7. Save the file.
 
 The Issueist app is now configured for development.
@@ -54,7 +54,7 @@ You'll notice `http://localhost:8080/` was already preset in the file above. Thi
    OAUTH_CLIENT_ID=
    OAUTH_CLIENT_SECRET=
    ```
-6. At the end of lines 1 and 2, add the **Client ID** and **Client Secret** again respectively.
+6. At the end of lines 1 and 2, add the **Client ID** and **Client Secret** respectively.
 7. Save the file.
 
 You are now ready for local development!
