@@ -104,6 +104,9 @@ const siteConfig = {
   // You may provide arbitrary config keys to be used as needed by your
   // template. For example, if you need your repo's URL...
   repoUrl: 'https://github.com/kaufmann42/issueist',
+
+  // image to display as a screenshot for the homescreen
+  screenshotImage: 'img/screenshot.jpg',
 };
 
 module.exports = siteConfig;
