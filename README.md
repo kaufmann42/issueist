@@ -3,7 +3,6 @@
 ![banner](img/banner.png)
 
 [![standard-readme compliant](https://img.shields.io/badge/standard--readme-OK-green.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
-
 [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=kaufmann42/issueist)](https://dependabot.com)
 
 > Create Github issues on the fly, wherever you are ✈️  (Chrome Extension)
