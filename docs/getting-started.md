@@ -4,9 +4,11 @@ title: Getting Started
 sidebar_label: Getting Started
 ---
 
+[![youtube-tutorial](http://img.youtube.com/vi/6ISKA1CQB-M/0.jpg)](http://www.youtube.com/watch?v=6ISKA1CQB-M "Youtube - Issueist Tutorial")
+
 ## Installing
 
-To install Issueist, download from the [this link]() on the Google Chrome Store. This will install it into your browser automatically.
+To install Issueist, download from the [this link](https://chrome.google.com/webstore/detail/issueist/eiekclnnglajcfmddidpcipngednfena) on the Google Chrome Store. This will install it into your browser automatically.
 
 _note: support for other browsers/ports of the application is currently being developed._
 
@@ -30,7 +32,7 @@ Creation of an issue is simple. From the select dropdown:
 2. Give the issue a title.
 3. Fill in the body using [GH flavored markdown.](https://guides.github.com/features/mastering-markdown/)
 
-As is there is no in-application previw, but that feature is in development. And that's it. This is all you need to know to use the Issueist application. It was left intentionally simple with future features being community driven.
+And that's it. This is all you need to know to use the Issueist application. It was left intentionally simple with future features being community driven.
 
 ## Contributing
 

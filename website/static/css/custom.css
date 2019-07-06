@@ -18,3 +18,7 @@
 .align-children-center>div>svg {
   margin: 15px;
 }
+
+.post>div>span>p>a {
+  text-decoration: underline;
+}
