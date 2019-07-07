@@ -52,6 +52,10 @@ PRs accepted.
 
 Small note: If editing the README, please conform to the [standard-readme](https://github.com/RichardLitt/standard-readme) specification.
 
+## Support
+
+If you're feeling generous, we have links to support contributors of this project. Just use the coffee badge above or the patreon below. Any donations are greatly appreciated! 😃
+
 [![Support us on Patreon](https://i1.wp.com/www.horrorhomeroom.com/wp-content/uploads/2018/06/support-us-on-patreon-large.jpg?fit=850%2C268)](https://www.patreon.com/bePatron?u=21942346)
 
 ## License
