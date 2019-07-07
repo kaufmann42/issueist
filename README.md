@@ -4,6 +4,7 @@
 
 [![standard-readme compliant](https://img.shields.io/badge/standard--readme-OK-green.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=kaufmann42/issueist)](https://dependabot.com)
+<a href="https://www.buymeacoffee.com/aAJQOqSnV" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 21px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
 
 > Create Github issues on the fly, wherever you are ✈️  (Chrome Extension)
 
@@ -50,6 +51,8 @@ See [the contributing file](./CONTRIBUTING.md)!
 PRs accepted.
 
 Small note: If editing the README, please conform to the [standard-readme](https://github.com/RichardLitt/standard-readme) specification.
+
+[![Support us on Patreon](https://i1.wp.com/www.horrorhomeroom.com/wp-content/uploads/2018/06/support-us-on-patreon-large.jpg?fit=850%2C268)](https://www.patreon.com/bePatron?u=21942346)
 
 ## License
 
