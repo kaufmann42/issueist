@@ -8,17 +8,17 @@ title: Guides
 
 ### Research
 
-Ever been in a rabbit hole on the internet with a new topic? Open up issueist, create a new 'TODO' repo, and start posting issues to it. For example, say that I want to learn more about block chain and its application to healthcare. I might start reading online, open up my Issueist extension and create a new repo named 'healthcare-blockchain'. On the article I'm reading I see a link for a tutorial to block chain applications, so I write as my issue title 'Complete Blockchain Tutorial' and in the body I might put something like:
+Ever been in a rabbit hole on the internet with a new topic? Open up issueist, create a new 'TODO' repo, and start posting issues to it. For example, say that I want to learn more about blockchain and its application to healthcare. I might start reading online, open up my Issueist extension and create a new repo named 'healthcare-blockchain'. On the article I'm reading I see a link for a tutorial to blockchain applications, so I write as my issue title 'Complete Blockchain Tutorial' and in the body I might put something like:
 
 > **Issue Title:** Complete Blockchain Tutorial
 
-> **Issue Body:** I read from [this website]() that [this tutorial]() was great for learning about blockchain and it's application to healthcare. When following the tutorial I think it's a good idea to keep the code in this repository under `/tutorials/1`. I want to try and get this done in two weeks.
+> **Issue Body:** I read from [this website](http://example.com) that [this tutorial](http://example.com/tutorial) was great for learning about blockchain and it's application to healthcare. When following the tutorial I think it's a good idea to keep the code in this repository under `/tutorials/1`. I want to try and get this done in two weeks.
 
 This is just an example, but you can see the power of keeping everything in Github. Github has a standardized system of formatted threaded discussion, project planning, and a place to collaborate / iterate on work all in one spot. This is what Issueist looks to take advantage of.
 
 ### Reinvigorate Established Projects
 
-Ever been reading blog posts or hacker news and see something perfectly apply to a project you've worked on? Instead of opening up a new tab and navigating to the repo, pop open your instance of issueist and start transfering knowledge. Let's look at an example. Say you're reading about patterns in Javascript. You come across the singleton pattern and realize it's perfect for logging on an application you contributed to a while back. You might write something like the following:
+Ever been reading blog posts or Hacker News and see something perfectly apply to a project you've worked on? Instead of opening up a new tab and navigating to the repo, pop open your instance of issueist and start transfering knowledge. Let's look at an example. Say you're reading about patterns in Javascript. You come across the singleton pattern and realize it's perfect for logging on an application you contributed to a while back. You might write something like the following:
 
 > **Issue Title:** Consider Singleton Pattern For Logging
 
@@ -49,7 +49,7 @@ Ever been reading blog posts or hacker news and see something perfectly apply to
 > // prints true
 > console.log(instanceA === instanceB);
 > ```
-> In the above code, we are creating a new instance by calling the singleton.getInstance method. If an instance already exists, this method simply returns that instance, if the instance doesn’t exist, it creates a new instance by calling the init() function.
+> In the above code, we are creating a new instance by calling the `singleton.getInstance()` method. If an instance already exists, this method simply returns that instance, if the instance doesn’t exist, it creates a new instance by calling the `init()` function.
 > 
 > Here we see that the instance of user is a singleton, if we apply the same logic to our logging module, we can keep track of meta data and not have to create new objects each time.
 
