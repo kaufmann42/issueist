@@ -29,7 +29,9 @@ const styles = theme => ({
     marginTop: theme.spacing(2),
   },
   wrapper: {
-    position: 'relative',
+    position: 'sticky',
+    bottom: 0,
+    zIndex: 10000,
   },
   buttonProgress: {
     position: 'absolute',
@@ -215,7 +217,6 @@ class App extends Component {
             <MarkdownEditor
               onChange={(value) => this.handleChange({target: {name: 'body', value}})}
             />
-            </FormControl>
             <div className={classes.wrapper}>
               <Button
                 variant="contained"
@@ -228,8 +229,8 @@ class App extends Component {
                 Submit
               </Button>
               {this.state.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+              <Typography color="error">{this.state.error}</Typography>
             </div>
-            <Typography color="error">{this.state.error}</Typography>
           </div>
         </div>
       </div>
