@@ -7,7 +7,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
 import GitHub from 'github-api';
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress, Divider } from '@material-ui/core';
 
 import { store, retrieve } from '../../services/storage';
 import AutocompleteSelect from '../../components/autocomplete-select';
@@ -32,6 +32,8 @@ const styles = theme => ({
     position: 'sticky',
     bottom: 0,
     zIndex: 10,
+    backgroundColor: 'white',
+    paddingBottom: '10px',
   },
   buttonProgress: {
     position: 'absolute',
@@ -218,6 +220,7 @@ class App extends Component {
               onChange={(value) => this.handleChange({target: {name: 'body', value}})}
             />
             <div className={classes.wrapper}>
+              <Divider style={{margin: '10px 0'}}/>
               <Button
                 variant="contained"
                 color="primary"
