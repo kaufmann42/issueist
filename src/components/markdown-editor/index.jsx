@@ -17,7 +17,7 @@ export default class MarkdownEditor extends React.Component {
   }
 
   componentDidMount() {
-    this.simpleMDE = new SimpleMDE({ element: document.getElementById('issueist-markdown-editor'), autosave: { enabled: true } })
+    this.simpleMDE = new SimpleMDE({ element: document.getElementById('issueist-markdown-editor'), autosave: {uniqueId: 'issueist-body', enabled: true } })
     this.simpleMDE.codemirror.on("change", () => {
       this.props.onChange(this.simpleMDE.value());
     });
