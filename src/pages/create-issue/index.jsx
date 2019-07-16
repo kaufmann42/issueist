@@ -31,7 +31,7 @@ const styles = theme => ({
   wrapper: {
     position: 'sticky',
     bottom: 0,
-    zIndex: 10000,
+    zIndex: 10,
   },
   buttonProgress: {
     position: 'absolute',
