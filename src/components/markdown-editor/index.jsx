@@ -6,18 +6,16 @@ import 'simplemde/dist/simplemde.min.css';
 export default class MarkdownEditor extends React.Component {
   static propTypes = {
     disabled: PropTypes.bool,
-    value: PropTypes.string.isRequired,
     onChange: PropTypes.func,
   }
 
-  static defaultProps = { 
-    value: '',
+  static defaultProps = {
     disabled: true,
     onChange: (e) => console.log(e),
   }
 
   componentDidMount() {
-    this.simpleMDE = new SimpleMDE({ element: document.getElementById('issueist-markdown-editor'), autosave: {uniqueId: 'issueist-body', enabled: true } })
+    this.simpleMDE = new SimpleMDE({ element: document.getElementById('issueist-markdown-editor'), autosave: {delay: 500, uniqueId: 'issueist-body', enabled: true } })
     this.simpleMDE.codemirror.on("change", () => {
       this.props.onChange(this.simpleMDE.value());
     });
