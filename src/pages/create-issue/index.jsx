@@ -12,6 +12,7 @@ import { CircularProgress } from '@material-ui/core';
 import { store, retrieve } from '../../services/storage';
 import AutocompleteSelect from '../../components/autocomplete-select';
 import NewRepoDialog from './new-repo-dialog.jsx'
+import MarkdownEditor from '../../components/markdown-editor';
 
 const styles = theme => ({
   root: {
@@ -211,20 +212,9 @@ class App extends Component {
                 variant="filled"
               />
             </FormControl>
-            <FormControl fullWidth>
-              <TextField
-                id="filled-multiline-flexible"
-                label="Issue Body"
-                name="body"
-                multiline
-                rows="8"
-                disabled={this.state.loading}
-                value={this.state.body}
-                onChange={this.handleChange}
-                margin="normal"
-                helperText="Markdown to fill the issue with"
-                variant="filled"
-              />
+            <MarkdownEditor
+              onChange={(value) => this.handleChange({target: {name: 'body', value}})}
+            />
             </FormControl>
             <div className={classes.wrapper}>
               <Button
