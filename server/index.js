@@ -13,7 +13,7 @@ app.all('*', function (req, res, next) {
 
 app.get('*', async (req, res) => {
   /** @type {String} */
-  const code = req.query.code;
+  const {code, client_id, client_secret} = req.query;
   try {
     console.log(`Authenticating Code: ${code.substr(0, 3)}...`);
     const response = await axios.post(
@@ -21,8 +21,8 @@ app.get('*', async (req, res) => {
       {},
       {
         params: {
-          client_id: process.env.OAUTH_CLIENT_ID,
-          client_secret: process.env.OAUTH_CLIENT_SECRET,
+          client_id: client_id || process.env.OAUTH_CLIENT_ID,
+          client_secret: client_secret || process.env.OAUTH_CLIENT_SECRET,
           code,
         },
       });
