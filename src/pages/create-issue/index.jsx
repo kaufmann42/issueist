@@ -12,6 +12,7 @@ import { CircularProgress } from '@material-ui/core';
 import { store, retrieve } from '../../services/storage';
 import AutocompleteSelect from '../../components/autocomplete-select';
 import NewRepoDialog from './new-repo-dialog.jsx'
+import Options from './options';
 
 const styles = theme => ({
   root: {
@@ -226,6 +227,8 @@ class App extends Component {
                 variant="filled"
               />
             </FormControl>
+            {/* TODO: still need to connect these options to an action */}
+            <Options/>
             <div className={classes.wrapper}>
               <Button
                 variant="contained"
