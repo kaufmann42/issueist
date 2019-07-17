@@ -14,12 +14,13 @@ export default class App extends Component {
     token: null,
     open: false,
     loading: false,
+    serverURL: process.env.REACT_APP_SERVER_URL,
   }
 
   onSuccess = (response) => {
     this.setState({loading: true});
     console.log('successful response');
-    fetch(`${process.env.REACT_APP_SERVER_URL}?code=${response.code}`).then(function(response) {
+    fetch(`${this.state.serverURL}?code=${response.code}${(this.state.client_id) ? '&client_id' + this.state.client_id : ''}`).then(function(response) {
       return response.json();
     })
     .then((res) => {
@@ -57,6 +58,10 @@ export default class App extends Component {
     this.setState({open});
   };
 
+  onUpdateConfig = (options) => {
+    this.setState(options);
+  }
+
   render() {
     const sideList = (
       <div>
@@ -76,7 +81,7 @@ export default class App extends Component {
     return (
       <div style={{width: '400px', height: '600px'}}>
         <AppBar onClickMenu={() => this.toggleDrawer(true)}/>
-        {!this.state.token ? <LoginPage loading={this.state.loading} onSuccess={this.onSuccess} onFailure={this.onFailure}/> : <CreateIssuePage token={this.state.token}/>}
+        {!this.state.token ? <LoginPage loading={this.state.loading} onUpdateConfig={this.onUpdateConfig} onSuccess={this.onSuccess} onFailure={this.onFailure}/> : <CreateIssuePage token={this.state.token}/>}
         <Drawer open={this.state.open} onClose={() => this.toggleDrawer(false)}>
           <div
             tabIndex={0}

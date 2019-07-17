@@ -51,7 +51,7 @@ function retrieveStateFromStorage() {
   return retrieve('issueistFormData')
 }
 
-class App extends Component {
+class CreateIssue extends Component {
   state = {
     repositories: [],
     selectedRepository: '',
@@ -247,9 +247,9 @@ class App extends Component {
   }
 }
 
-App.propTypes = {
+CreateIssue.propTypes = {
   classes: PropTypes.object.isRequired,
   token: PropTypes.string.isRequired,
 };
 
-export default withStyles(styles)(App);
+export default withStyles(styles)(CreateIssue);
