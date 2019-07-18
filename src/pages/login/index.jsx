@@ -28,17 +28,17 @@ export default class LoginPage extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <div style={{ display: 'flex', flexDirection: 'column', minHeight: '400px', justifyContent: 'center', padding: '20px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', margin: 'auto', maxWidth: '440px', alignItems: 'center', padding: '20px' }}>
           {this.props.loading ?
             <CircularProgress style={{ alignSelf: 'center' }} size={48} />
             :
             <>
-              <GitHubLogin 
+              <GitHubLogin
                 scopes={'repo'}
-                redirectUri={process.env.REACT_APP_REDIRECT_URL} 
+                redirectUri={process.env.REACT_APP_REDIRECT_URL}
                 OAuthAuthorizeURL={this.state.OAuthAuthorizeURL}
                 clientId={this.state.client_id}
-                onSuccess={this.props.onSuccess} 
+                onSuccess={this.props.onSuccess}
                 onFailure={this.props.onFailure} />
               <Typography variant="body1" align="center">
                 You need to authorize access to your Github repositories before you can use this application
