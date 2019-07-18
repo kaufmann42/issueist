@@ -15,12 +15,13 @@ export default class App extends Component {
     open: false,
     loading: false,
     serverURL: process.env.REACT_APP_SERVER_URL,
+    OAuthURL: null,
   }
 
   onSuccess = (response) => {
     this.setState({loading: true});
     console.log('successful response');
-    fetch(`${this.state.serverURL}?code=${response.code}${(this.state.client_id) ? '&client_id' + this.state.client_id : ''}`).then(function(response) {
+    fetch(`${this.state.serverURL}?code=${response.code}${(this.state.client_id) ? '&client_id' + this.state.client_id : ''}${(this.state.OAuthURL) ? '&client_id' + this.state.OAuthURL : ''}`).then(function(response) {
       return response.json();
     })
     .then((res) => {

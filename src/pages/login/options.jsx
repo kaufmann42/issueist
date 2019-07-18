@@ -36,7 +36,7 @@ export class LoginOptions extends React.Component {
   };
 
   isFormValid = (formData) => {
-    return ((formData.client_id && formData.client_secret) || formData.serverURL) && formData.securityCheck;
+    return formData.securityCheck;
   }
 
   /**
@@ -50,7 +50,6 @@ export class LoginOptions extends React.Component {
   }
 
   render() {
-    const { classes } = this.props;
     const { expanded } = this.state;
     const { handleOpenPanel, handleChange } = this;
     return (
@@ -60,13 +59,26 @@ export class LoginOptions extends React.Component {
           aria-controls="options"
           id="options"
         >
-          <Typography>Options</Typography>
+          <Typography>Advanced Options</Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           <FormGroup>
             <TextField
+              label="OAuth Account Authorize URL"
+              name="OAuthAuthorizeURL"
+              helperText={'https://github.com/login/oauth/authorize'}
+              onChange={handleChange}
+            />
+            <TextField
               label="Server URL"
               name="serverURL"
+              helperText={'https://gatekeeper.wolfpak.now.sh'}
+              onChange={handleChange}
+            />
+            <TextField
+              label="OAuth URL"
+              name="OAuthURL"
+              helperText={'https://github.com/login/oauth/access_token'}
               onChange={handleChange}
             />
             <TextField
@@ -80,7 +92,7 @@ export class LoginOptions extends React.Component {
               type="password"
               onChange={handleChange}
             />
-            <FormControlLabel control={<Checkbox name="securityCheck" onChange={this.handleChange} />} label="I understand the security risks" />
+            <FormControlLabel control={<Checkbox name="securityCheck" onChange={this.handleChange} />} label="I know what I'm doing & understand the security risks." />
             <Button disabled={!this.state.formValid} onClick={() => {
               handleOpenPanel()();
               this.props.onClickSaveButton(this.state.formData);
