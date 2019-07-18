@@ -13,11 +13,11 @@ app.all('*', function (req, res, next) {
 
 app.get('*', async (req, res) => {
   /** @type {String} */
-  const {code, client_id, client_secret} = req.query;
+  const {code, client_id, client_secret, serverURL} = req.query;
   try {
     console.log(`Authenticating Code: ${code.substr(0, 3)}...`);
     const response = await axios.post(
-      'https://github.com/login/oauth/access_token',
+      serverURL || 'https://github.com/login/oauth/access_token',
       {},
       {
         params: {
