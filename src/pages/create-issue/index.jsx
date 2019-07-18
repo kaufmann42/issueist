@@ -7,11 +7,12 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
 import GitHub from 'github-api';
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress, Divider } from '@material-ui/core';
 
 import { store, retrieve } from '../../services/storage';
 import AutocompleteSelect from '../../components/autocomplete-select';
 import NewRepoDialog from './new-repo-dialog.jsx'
+import MarkdownEditor from '../../components/markdown-editor';
 
 const styles = theme => ({
   root: {
@@ -28,7 +29,11 @@ const styles = theme => ({
     marginTop: theme.spacing(2),
   },
   wrapper: {
-    position: 'relative',
+    position: 'sticky',
+    bottom: 0,
+    zIndex: 10,
+    backgroundColor: 'white',
+    paddingBottom: '10px',
   },
   buttonProgress: {
     position: 'absolute',
@@ -211,22 +216,11 @@ class CreateIssue extends Component {
                 variant="filled"
               />
             </FormControl>
-            <FormControl fullWidth>
-              <TextField
-                id="filled-multiline-flexible"
-                label="Issue Body"
-                name="body"
-                multiline
-                rows="8"
-                disabled={this.state.loading}
-                value={this.state.body}
-                onChange={this.handleChange}
-                margin="normal"
-                helperText="Markdown to fill the issue with"
-                variant="filled"
-              />
-            </FormControl>
+            <MarkdownEditor
+              onChange={(value) => this.handleChange({target: {name: 'body', value}})}
+            />
             <div className={classes.wrapper}>
+              <Divider style={{margin: '10px 0'}}/>
               <Button
                 variant="contained"
                 color="primary"
@@ -238,8 +232,8 @@ class CreateIssue extends Component {
                 Submit
               </Button>
               {this.state.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+              <Typography color="error">{this.state.error}</Typography>
             </div>
-            <Typography color="error">{this.state.error}</Typography>
           </div>
         </div>
       </div>
