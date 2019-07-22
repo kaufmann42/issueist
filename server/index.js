@@ -21,8 +21,8 @@ app.get('*', async (req, res) => {
       {},
       {
         params: {
-          client_id: client_id || process.env.OAUTH_CLIENT_ID,
-          client_secret: client_secret || process.env.OAUTH_CLIENT_SECRET,
+          client_id: client_id || (serverURL) ? '' : process.env.OAUTH_CLIENT_ID,
+          client_secret: client_secret || (serverURL) ? '' : process.env.OAUTH_CLIENT_SECRET,
           code,
         },
       });
