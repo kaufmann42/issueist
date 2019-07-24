@@ -86,7 +86,7 @@ export default class App extends Component {
         {(!userIsAuthenticated) ?
           <LoginPage loading={this.state.loading} onUpdateConfig={this.onUpdateConfig} onSuccess={this.onSuccess} onFailure={this.onFailure} />
           :
-          <CreateIssuePage token={this.state.token} />}
+          <CreateIssuePage serverURL={this.state.serverURL} token={this.state.token} />}
         <Drawer open={this.state.open} onClose={() => this.toggleDrawer(false)}>
           <div
             tabIndex={0}

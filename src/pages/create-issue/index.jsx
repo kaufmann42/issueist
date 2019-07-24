@@ -76,7 +76,9 @@ class CreateIssue extends Component {
     // basic auth
     this.gh = new GitHub({
       token: this.props.token,
-    });
+    },
+    this.props.serverURL
+    );
 
     this.fetchUserRepos()
   }
