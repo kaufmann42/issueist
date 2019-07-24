@@ -41,7 +41,9 @@ class PopupWindow {
 
           resolve(params);
 
-          this.close();
+          window.setTimeout(() => {
+            this.close();
+          }, 500);
         } catch (error) {
           /*
            * Ignore DOMException: Blocked a frame with origin from accessing a
