@@ -65,6 +65,7 @@ class CreateIssue extends Component {
     timer: '',
     error: null,
     loading: false,
+    template: null,
   }
 
   componentDidMount() {
@@ -183,7 +184,13 @@ class CreateIssue extends Component {
       });
   }
 
+  saveEditorAsTemplate = () => {
+    this.setState({template: this.state.body});
+    store('issueistTemplate', this.state.body);
+  }
+
   render() {
+    const { template } = this.state;
     const { classes } = this.props;
 
     return (
@@ -220,7 +227,16 @@ class CreateIssue extends Component {
                 variant="filled"
               />
             </FormControl>
+            <Button
+              disabled={this.state.loading}
+              onClick={this.saveEditorAsTemplate}
+              className={classes.button}
+              style={{float: 'right', zIndex: 100}}
+            >
+              Save As Template
+            </Button>
             <MarkdownEditor
+              initialValue={template}
               onChange={(value) => this.handleChange({ target: { name: 'body', value } })}
             />
             <div className={classes.wrapper}>
