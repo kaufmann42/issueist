@@ -17,12 +17,12 @@ app.get('*', async (req, res) => {
   try {
     console.log(`Authenticating Code: ${code.substr(0, 3)}...`);
     const response = await axios.post(
-      serverURL || 'https://github.com/login/oauth/access_token',
+      (serverURL || 'https://github.com/') + 'login/oauth/access_token',
       {},
       {
         params: {
-          client_id: client_id || (serverURL) ? '' : process.env.OAUTH_CLIENT_ID,
-          client_secret: client_secret || (serverURL) ? '' : process.env.OAUTH_CLIENT_SECRET,
+          client_id: (serverURL) ? client_id : process.env.OAUTH_CLIENT_ID,
+          client_secret: (serverURL) ? client_secret : process.env.OAUTH_CLIENT_SECRET,
           code,
         },
       });
