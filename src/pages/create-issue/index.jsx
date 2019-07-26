@@ -5,10 +5,9 @@ import Typography from '@material-ui/core/Typography';
 import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-
+import { toast } from 'react-toastify';
 import GitHub from 'github-api';
 import { CircularProgress, Divider } from '@material-ui/core';
-
 import { store, retrieve } from '../../services/storage';
 import AutocompleteSelect from '../../components/autocomplete-select';
 import NewRepoDialog from './new-repo-dialog.jsx'
@@ -108,10 +107,11 @@ class CreateIssue extends Component {
 
     try {
       const issue = this.gh.getIssues(user, repo);
-      await issue.createIssue({
+      const response = await issue.createIssue({
         title,
         body,
       })
+      debugger;
 
       this.setState({
         title: '',
@@ -124,8 +124,9 @@ class CreateIssue extends Component {
       });
 
       this.setLoading(false);
+      toast(<Typography>Successfully submitted <a href={response.data.html_url} rel="noopener noreferrer" target="_blank">issue.</a></Typography>);
     } catch (e) {
-      this.setState({ error: 'Unknown error. Try again later.' });
+      toast.error('Unknown error. Try again later.');
       this.setLoading(false)
     }
   }

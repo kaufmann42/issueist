@@ -100,7 +100,7 @@ export default class App extends Component {
             {sideList}
           </div>
         </Drawer>
-        <ToastContainer position={toast.POSITION.BOTTOM_LEFT} />
+        <ToastContainer closeOnClick={false} position={toast.POSITION.BOTTOM_LEFT} />
       </div>
     );
   }
