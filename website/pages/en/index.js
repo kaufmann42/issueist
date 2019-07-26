@@ -97,9 +97,9 @@ class HomeSplash extends React.Component {
             </div>
             <div className="col">
               <FaCompass size="3em" />
-              <h4>Metadata Included</h4>
+              <h4>Templates For Speed</h4>
               <p>
-                Optionally attach meta data in invisible comments with when posting your issues. When you come back later you'll have information like what site you were on and issue context.
+                Save issue templates to be filled out quickly later. Structure your issues to provide consistency and enforce thoroughness of submitted content.
                 </p>
             </div>
           </div>
