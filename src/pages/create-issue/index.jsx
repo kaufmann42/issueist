@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {withStyles} from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
@@ -71,26 +71,30 @@ class CreateIssue extends Component {
     // First update the component's state with any todo data that was
     // persisted in the store.
     retrieveStateFromStorage()
-      .then((state) => this.setState({...state}))
+      .then((state) => this.setState({ ...state }))
 
-    // basic auth
-    this.gh = new GitHub({
-      token: this.props.token,
-    });
-
-    this.fetchUserRepos()
+    retrieve('baseURL')
+      .then((baseURL) => {
+        // basic auth
+        this.gh = new GitHub({
+          token: this.props.token,
+        },
+          baseURL ? baseURL.slice(0, -1).replace('github', 'api.github') : undefined,
+        ); // need to remove the last forward slash
+        this.fetchUserRepos();
+      });
   }
 
   /**
    * Helper function to update the state's `loading` property.
    */
   setLoading = (loading) => {
-    this.setState({loading});
+    this.setState({ loading });
   }
 
   submit = async () => {
     this.setLoading(true);
-    const {title, body} = this.state;
+    const { title, body } = this.state;
     const user = this.state.selectedRepository.split('/')[0];
     const repo = this.state.selectedRepository.split('/')[1];
     if (!title || !repo) {
@@ -120,7 +124,7 @@ class CreateIssue extends Component {
 
       this.setLoading(false);
     } catch (e) {
-      this.setState({error: 'Unknown error. Try again later.'});
+      this.setState({ error: 'Unknown error. Try again later.' });
       this.setLoading(false)
     }
   }
@@ -132,7 +136,7 @@ class CreateIssue extends Component {
   fetchUserRepos() {
     const user = this.gh.getUser();
     return user.listRepos()
-      .then(({data}) => {
+      .then(({ data }) => {
         const repositories = data.map(d => d.full_name);
         this.setState({
           repositories
@@ -148,8 +152,8 @@ class CreateIssue extends Component {
    */
   createNewTodoRepo = (name) => {
     const user = this.gh.getUser();
-    return user.createRepo({name})
-      .then(({data}) => {
+    return user.createRepo({ name })
+      .then(({ data }) => {
         const newRepoName = data.full_name
         this.setState({
           repositories: this.state.repositories.concat(newRepoName),
@@ -184,13 +188,13 @@ class CreateIssue extends Component {
 
     return (
       <div className={classes.root}>
-        <div style={{padding: '20px'}}>
+        <div style={{ padding: '20px' }}>
           <Typography variant="body2" color="inherit">
             Save your thoughts straight to your Github repositories issues.
           </Typography>
           <NewRepoDialog
             createRepo={this.createNewTodoRepo}
-            buttonStyle={{float: 'right'}}
+            buttonStyle={{ float: 'right' }}
           />
           <div className={classes.root}>
             <FormControl fullWidth>
@@ -217,10 +221,10 @@ class CreateIssue extends Component {
               />
             </FormControl>
             <MarkdownEditor
-              onChange={(value) => this.handleChange({target: {name: 'body', value}})}
+              onChange={(value) => this.handleChange({ target: { name: 'body', value } })}
             />
             <div className={classes.wrapper}>
-              <Divider style={{margin: '10px 0'}}/>
+              <Divider style={{ margin: '10px 0' }} />
               <Button
                 variant="contained"
                 color="primary"

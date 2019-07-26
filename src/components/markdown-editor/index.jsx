@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import SimpleMDE from 'simplemde';
 import 'simplemde/dist/simplemde.min.css';
+import logger from '../../services/logger';
 
 export default class MarkdownEditor extends React.Component {
   static propTypes = {
@@ -11,7 +12,7 @@ export default class MarkdownEditor extends React.Component {
 
   static defaultProps = {
     disabled: true,
-    onChange: (e) => console.log(e),
+    onChange: (e) => logger.debug(e),
   }
 
   componentDidMount() {

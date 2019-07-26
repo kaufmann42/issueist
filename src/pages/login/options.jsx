@@ -4,6 +4,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { withStyles } from '@material-ui/core/styles';
 import Checkbox from '@material-ui/core/Checkbox';
 import PropTypes from 'prop-types';
+import logger from '../../services/logger';
 
 const styles = theme => ({
   root: {
@@ -22,7 +23,7 @@ export class LoginOptions extends React.Component {
   }
 
   static defaultProps = {
-    onToggleAddMetaData: (e) => console.log('Toggled metadata', e.target)
+    onToggleAddMetaData: (e) => logger.debug('Toggled metadata', e.target)
   }
 
   state = {
@@ -45,7 +46,11 @@ export class LoginOptions extends React.Component {
    */
   handleChange = (event) => {
     const formData = this.state.formData;
-    formData[event.target.name] = event.target.value || event.target.checked;
+    if (event.target.name === 'securityCheck') {
+      formData[event.target.name] = event.target.checked;
+    } else {
+      formData[event.target.name] = event.target.value;
+    }
     this.setState({ formData, formValid: this.isFormValid(formData) });
   }
 
@@ -64,21 +69,15 @@ export class LoginOptions extends React.Component {
         <ExpansionPanelDetails>
           <FormGroup>
             <TextField
-              label="OAuth Account Authorize URL"
-              name="OAuthAuthorizeURL"
-              helperText={'https://github.com/login/oauth/authorize'}
+              label="Base URL"
+              name="baseURL"
+              helperText={'https://github.com/'}
               onChange={handleChange}
             />
             <TextField
               label="Server URL"
               name="serverURL"
               helperText={'https://gatekeeper.wolfpak.now.sh'}
-              onChange={handleChange}
-            />
-            <TextField
-              label="OAuth URL"
-              name="OAuthURL"
-              helperText={'https://github.com/login/oauth/access_token'}
               onChange={handleChange}
             />
             <TextField
