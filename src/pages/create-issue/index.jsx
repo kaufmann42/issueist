@@ -79,7 +79,7 @@ class CreateIssue extends Component {
         this.gh = new GitHub({
           token: this.props.token,
         },
-          baseURL.slice(0, -1).replace('github', 'api.github'),
+          baseURL ? baseURL.slice(0, -1).replace('github', 'api.github') : undefined,
         ); // need to remove the last forward slash
         this.fetchUserRepos();
       });

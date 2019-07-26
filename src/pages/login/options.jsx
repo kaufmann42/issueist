@@ -46,7 +46,11 @@ export class LoginOptions extends React.Component {
    */
   handleChange = (event) => {
     const formData = this.state.formData;
-    formData[event.target.name] = event.target.value || event.target.checked;
+    if (event.target.name === 'securityCheck') {
+      formData[event.target.name] = event.target.checked;
+    } else {
+      formData[event.target.name] = event.target.value;
+    }
     this.setState({ formData, formValid: this.isFormValid(formData) });
   }
 

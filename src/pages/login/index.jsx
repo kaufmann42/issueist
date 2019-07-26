@@ -16,7 +16,7 @@ export default class LoginPage extends React.Component {
   }
 
   state = {
-    client_id: process.env.REACT_APP_GITHUB_CLIENT_ID,
+    client_id: null,
     baseURL: null,
   }
 
@@ -37,7 +37,7 @@ export default class LoginPage extends React.Component {
                 scopes={'repo'}
                 redirectUri={process.env.REACT_APP_REDIRECT_URL}
                 baseURL={this.state.baseURL}
-                clientId={this.state.client_id}
+                clientId={this.state.client_id || process.env.REACT_APP_GITHUB_CLIENT_ID}
                 onSuccess={this.props.onSuccess}
                 onFailure={this.props.onFailure} />
               <Typography variant="body1" align="center">

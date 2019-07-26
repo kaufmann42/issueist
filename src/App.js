@@ -61,7 +61,9 @@ export default class App extends Component {
 
   onUpdateConfig = (options) => {
     this.setState(options);
-    store('baseURL', options.baseURL);
+    if (options.baseURL) {
+      store('baseURL', options.baseURL);
+    }
   }
 
   render() {
