@@ -15,13 +15,12 @@ export default class App extends Component {
     open: false,
     loading: false,
     serverURL: process.env.REACT_APP_SERVER_URL,
-    OAuthURL: null,
+    baseURL: null,
   }
 
   onSuccess = (response) => {
     this.setState({ loading: true });
-    console.log('successful response');
-    fetch(`${this.state.serverURL}?code=${response.code}${(this.state.client_id) ? '&client_id' + this.state.client_id : ''}${(this.state.OAuthURL) ? '&client_id' + this.state.OAuthURL : ''}`).then(function (response) {
+    fetch(`${this.state.serverURL}?code=${response.code}${(this.state.client_id) ? '&client_id=' + this.state.client_id : ''}${(this.state.baseURL) ? '&serverURL=' + this.state.baseURL : ''}${(this.state.client_secret) ? '&client_secret=' + this.state.client_secret : ''}`).then(function (response) {
       return response.json();
     })
       .then((res) => {
@@ -61,6 +60,7 @@ export default class App extends Component {
 
   onUpdateConfig = (options) => {
     this.setState(options);
+    store('baseURL', options.baseURL);
   }
 
   render() {
@@ -86,7 +86,7 @@ export default class App extends Component {
         {(!userIsAuthenticated) ?
           <LoginPage loading={this.state.loading} onUpdateConfig={this.onUpdateConfig} onSuccess={this.onSuccess} onFailure={this.onFailure} />
           :
-          <CreateIssuePage serverURL={this.state.serverURL} token={this.state.token} />}
+          <CreateIssuePage baseURL={this.state.baseURL} token={this.state.token} />}
         <Drawer open={this.state.open} onClose={() => this.toggleDrawer(false)}>
           <div
             tabIndex={0}

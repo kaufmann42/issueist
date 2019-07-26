@@ -17,7 +17,7 @@ export default class LoginPage extends React.Component {
 
   state = {
     client_id: process.env.REACT_APP_GITHUB_CLIENT_ID,
-    OAuthAuthorizeURL: null,
+    baseURL: null,
   }
 
   updateLoginOptions = (options) => {
@@ -36,7 +36,7 @@ export default class LoginPage extends React.Component {
               <GitHubLogin
                 scopes={'repo'}
                 redirectUri={process.env.REACT_APP_REDIRECT_URL}
-                OAuthAuthorizeURL={this.state.OAuthAuthorizeURL}
+                baseURL={this.state.baseURL}
                 clientId={this.state.client_id}
                 onSuccess={this.props.onSuccess}
                 onFailure={this.props.onFailure} />

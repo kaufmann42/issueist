@@ -73,14 +73,16 @@ class CreateIssue extends Component {
     retrieveStateFromStorage()
       .then((state) => this.setState({ ...state }))
 
-    // basic auth
-    this.gh = new GitHub({
-      token: this.props.token,
-    },
-      this.props.serverURL
-    );
-
-    this.fetchUserRepos()
+    retrieve('baseURL')
+      .then((baseURL) => {
+        // basic auth
+        this.gh = new GitHub({
+          token: this.props.token,
+        },
+          baseURL.slice(0, -1).replace('github', 'api.github'),
+        ); // need to remove the last forward slash
+        this.fetchUserRepos();
+      });
   }
 
   /**

@@ -64,21 +64,15 @@ export class LoginOptions extends React.Component {
         <ExpansionPanelDetails>
           <FormGroup>
             <TextField
-              label="OAuth Account Authorize URL"
-              name="OAuthAuthorizeURL"
-              helperText={'https://github.com/login/oauth/authorize'}
+              label="Base URL"
+              name="baseURL"
+              helperText={'https://github.com/'}
               onChange={handleChange}
             />
             <TextField
               label="Server URL"
               name="serverURL"
               helperText={'https://gatekeeper.wolfpak.now.sh'}
-              onChange={handleChange}
-            />
-            <TextField
-              label="OAuth URL"
-              name="OAuthURL"
-              helperText={'https://github.com/login/oauth/access_token'}
               onChange={handleChange}
             />
             <TextField
