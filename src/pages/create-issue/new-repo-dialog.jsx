@@ -12,6 +12,7 @@ import {
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { blue } from '@material-ui/core/colors';
+import logger from '../../services/logger';
 
 const styles = (theme) => ({
   wrapper: {
@@ -68,7 +69,7 @@ class NewRepoDialog extends Component {
       await this.props.createRepo(this.state.name)
       this.handleClose();
     } catch (e) {
-      console.log(`Error creating repo: ${e}`)
+      logger.error(`Error creating repo: ${e}`)
       this.setState({
         error: 'Failed to create a new repo',
         loading: false

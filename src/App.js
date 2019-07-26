@@ -8,6 +8,7 @@ import LogOutIcon from '@material-ui/icons/PowerSettingsNew';
 import AppBar from './components/app-bar';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import logger from './services/logger';
 
 export default class App extends Component {
   state = {
@@ -31,7 +32,7 @@ export default class App extends Component {
         this.setState({ token: res.token, loading: false });
       })
       .catch((err) => {
-        console.error(err);
+        logger.error(err);
         this.setState({ loading: false });
         toast.error('There was an error authenticating. Check console for details.');
       });
@@ -44,11 +45,11 @@ export default class App extends Component {
 
   onFailure = (response) => {
     toast.error('There was an error authenticating. Check console for details.');
-    console.error(response);
+    logger.error(response);
   }
 
   componentDidMount() {
-    console.log('setting state from onComp');
+    logger.debug('setting state from onComp');
 
     retrieve('token')
       .then((token) => this.setState({ token }));

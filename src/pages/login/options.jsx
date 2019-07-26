@@ -4,6 +4,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { withStyles } from '@material-ui/core/styles';
 import Checkbox from '@material-ui/core/Checkbox';
 import PropTypes from 'prop-types';
+import logger from '../../services/logger';
 
 const styles = theme => ({
   root: {
@@ -22,7 +23,7 @@ export class LoginOptions extends React.Component {
   }
 
   static defaultProps = {
-    onToggleAddMetaData: (e) => console.log('Toggled metadata', e.target)
+    onToggleAddMetaData: (e) => logger.debug('Toggled metadata', e.target)
   }
 
   state = {

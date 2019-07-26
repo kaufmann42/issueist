@@ -1,4 +1,5 @@
 import { toParams, toQuery } from './utils';
+import logger from '../../services/logger';
 
 class PopupWindow {
   constructor(id, url, options = {}) {
@@ -21,7 +22,7 @@ class PopupWindow {
   poll() {
     this.promise = new Promise((resolve, reject) => {
       this._iid = window.setInterval(() => {
-        console.log('Running poll')
+        logger.debug('Running poll')
         try {
           const popup = this.window;
 
