@@ -85,7 +85,7 @@ class HomeSplash extends React.Component {
               <FaMagic size="3em" />
               <h4>Run From Anywhere</h4>
               <p>
-                Issueist is a PWA, giving it incredible flexibility. Download the chrome extension, or just embed <a>https://issueist.wolfpak.now.sh</a> anywhere in your browser to use it.
+                Issueist is a PWA, giving it incredible flexibility. Download the chrome extension, or just embed <a href="https://issueist.wolfpak.now.sh" rel="noopener noreferrer" target="_blank">https://issueist.wolfpak.now.sh</a> anywhere in your browser to use it.
                 </p>
             </div>
             <div className="col">
