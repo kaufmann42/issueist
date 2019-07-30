@@ -5,14 +5,15 @@ import Typography from '@material-ui/core/Typography';
 import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-
+import { toast } from 'react-toastify';
 import GitHub from 'github-api';
+import SimpleMDE from 'simplemde';
+import 'simplemde/dist/simplemde.min.css';
 import { CircularProgress, Divider } from '@material-ui/core';
-
 import { store, retrieve } from '../../services/storage';
 import AutocompleteSelect from '../../components/autocomplete-select';
 import NewRepoDialog from './new-repo-dialog.jsx'
-import MarkdownEditor from '../../components/markdown-editor';
+import logger from '../../services/logger';
 
 const styles = theme => ({
   root: {
@@ -65,6 +66,7 @@ class CreateIssue extends Component {
     timer: '',
     error: null,
     loading: false,
+    template: null,
   }
 
   componentDidMount() {
@@ -82,6 +84,31 @@ class CreateIssue extends Component {
           baseURL ? baseURL.slice(0, -1).replace('github', 'api.github') : undefined,
         ); // need to remove the last forward slash
         this.fetchUserRepos();
+      })
+      .catch((err) => {
+        toast.error('There was an error connecting to github. Check console for details.');
+        logger.error(err);
+      });
+
+      retrieve('issueistTemplate').then(template => {
+        this.setState({template});
+        this.simpleMDE = new SimpleMDE({ 
+          element: document.getElementById('issueist-markdown-editor'), 
+          autosave: {
+            delay: 500, 
+            uniqueId: 'issueist-body', 
+            enabled: true 
+          },
+          hideIcons: ['guide'],
+          ...(template ? {initialValue: template} : {}),
+        })
+        this.simpleMDE.codemirror.on("change", () => {
+          this.handleChange({ target: { name: 'body', value: this.simpleMDE.value() } });
+        });
+      })
+      .catch((err) => {
+        toast.error('There was an error initializing editor. Check console for details.');
+        logger.error(err);
       });
   }
 
@@ -107,7 +134,7 @@ class CreateIssue extends Component {
 
     try {
       const issue = this.gh.getIssues(user, repo);
-      await issue.createIssue({
+      const response = await issue.createIssue({
         title,
         body,
       })
@@ -117,14 +144,16 @@ class CreateIssue extends Component {
         error: null,
         body: '',
       });
+      this.simpleMDE.value(this.state.template || '');
 
       writeStateToStorage({
         selectedRepository: this.state.selectedRepository
       });
 
       this.setLoading(false);
+      toast(<Typography>Successfully submitted <a href={response.data.html_url} rel="noopener noreferrer" target="_blank">issue.</a></Typography>);
     } catch (e) {
-      this.setState({ error: 'Unknown error. Try again later.' });
+      toast.error('Unknown error. Try again later.');
       this.setLoading(false)
     }
   }
@@ -158,7 +187,8 @@ class CreateIssue extends Component {
         this.setState({
           repositories: this.state.repositories.concat(newRepoName),
           selectedRepository: newRepoName
-        })
+        });
+        toast(<Typography>Sucessfully created new github <a href={data.html_url} rel="noopener noreferrer" target="_blank">repository.</a></Typography>);
         return newRepoName;
       });
   }
@@ -181,6 +211,11 @@ class CreateIssue extends Component {
           timer
         })
       });
+  }
+
+  saveEditorAsTemplate = () => {
+    this.setState({template: this.state.body});
+    store('issueistTemplate', this.state.body);
   }
 
   render() {
@@ -220,9 +255,15 @@ class CreateIssue extends Component {
                 variant="filled"
               />
             </FormControl>
-            <MarkdownEditor
-              onChange={(value) => this.handleChange({ target: { name: 'body', value } })}
-            />
+            <Button
+              disabled={this.state.loading}
+              onClick={this.saveEditorAsTemplate}
+              className={classes.button}
+              style={{float: 'right', zIndex: 100}}
+            >
+              Save As Template
+            </Button>
+            <textarea id="issueist-markdown-editor" />
             <div className={classes.wrapper}>
               <Divider style={{ margin: '10px 0' }} />
               <Button
