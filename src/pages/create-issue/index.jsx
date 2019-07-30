@@ -99,6 +99,7 @@ class CreateIssue extends Component {
             uniqueId: 'issueist-body', 
             enabled: true 
           },
+          hideIcons: ['guide'],
           ...(template ? {initialValue: template} : {}),
         })
         this.simpleMDE.codemirror.on("change", () => {
