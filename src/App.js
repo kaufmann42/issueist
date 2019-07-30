@@ -2,13 +2,15 @@ import React, { Component } from 'react';
 import LoginPage from './pages/login';
 import CreateIssuePage from './pages/create-issue';
 import { store, retrieve, deleteStorage } from './services/storage';
-import { List, ListItem, ListItemIcon, ListItemText, Drawer } from '@material-ui/core';
+import { List, ListItem, ListItemIcon, ListItemText, Drawer, CssBaseline, createMuiTheme } from '@material-ui/core';
 import HelpIcon from '@material-ui/icons/Help';
 import LogOutIcon from '@material-ui/icons/PowerSettingsNew';
 import AppBar from './components/app-bar';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import logger from './services/logger';
+import { ThemeProvider } from '@material-ui/styles';
+import theme from './theme.js';
 
 export default class App extends Component {
   state = {
@@ -84,24 +86,28 @@ export default class App extends Component {
       </div>
     );
     return (
-      <div>
-        <AppBar onClickMenu={() => this.toggleDrawer(true)} />
-        {(!userIsAuthenticated) ?
-          <LoginPage loading={this.state.loading} onUpdateConfig={this.onUpdateConfig} onSuccess={this.onSuccess} onFailure={this.onFailure} />
-          :
-          <CreateIssuePage baseURL={this.state.baseURL} token={this.state.token} />}
-        <Drawer open={this.state.open} onClose={() => this.toggleDrawer(false)}>
-          <div
-            tabIndex={0}
-            role="button"
-            onClick={() => this.toggleDrawer(false)}
-            onKeyDown={() => this.toggleDrawer(false)}
-          >
-            {sideList}
+      <CssBaseline>
+        <ThemeProvider theme={createMuiTheme(theme)}>
+          <div>
+            <AppBar onClickMenu={() => this.toggleDrawer(true)} />
+            {(!userIsAuthenticated) ?
+              <LoginPage loading={this.state.loading} onUpdateConfig={this.onUpdateConfig} onSuccess={this.onSuccess} onFailure={this.onFailure} />
+              :
+              <CreateIssuePage baseURL={this.state.baseURL} token={this.state.token} />}
+            <Drawer open={this.state.open} onClose={() => this.toggleDrawer(false)}>
+              <div
+                tabIndex={0}
+                role="button"
+                onClick={() => this.toggleDrawer(false)}
+                onKeyDown={() => this.toggleDrawer(false)}
+              >
+                {sideList}
+              </div>
+            </Drawer>
+            <ToastContainer closeOnClick={false} position={toast.POSITION.BOTTOM_LEFT} />
           </div>
-        </Drawer>
-        <ToastContainer closeOnClick={false} position={toast.POSITION.BOTTOM_LEFT} />
-      </div>
+        </ThemeProvider>
+      </CssBaseline>
     );
   }
 }
