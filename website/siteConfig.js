@@ -107,6 +107,9 @@ const siteConfig = {
 
   // image to display as a screenshot for the homescreen
   screenshotImage: 'img/screenshot.jpg',
+
+  // Google Analytics tracking ID to track page views.
+  gaTrackingId: 'UA-144642184-1',
 };
 
 module.exports = siteConfig;

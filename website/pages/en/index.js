@@ -85,7 +85,7 @@ class HomeSplash extends React.Component {
               <FaMagic size="3em" />
               <h4>Run From Anywhere</h4>
               <p>
-                Issueist is a PWA, giving it incredible flexibility. Download the chrome extension, or just embed <a>https://issueist.wolfpak.now.sh</a> anywhere in your browser to use it.
+                Issueist is a PWA, giving it incredible flexibility. Download the chrome extension, or just embed <a href="https://issueist.wolfpak.now.sh" rel="noopener noreferrer" target="_blank">https://issueist.wolfpak.now.sh</a> anywhere in your browser to use it.
                 </p>
             </div>
             <div className="col">
@@ -97,9 +97,9 @@ class HomeSplash extends React.Component {
             </div>
             <div className="col">
               <FaCompass size="3em" />
-              <h4>Metadata Included</h4>
+              <h4>Templates For Speed</h4>
               <p>
-                Optionally attach meta data in invisible comments with when posting your issues. When you come back later you'll have information like what site you were on and issue context.
+                Save issue templates to be filled out quickly later. Structure your issues to provide consistency and enforce thoroughness of submitted content.
                 </p>
             </div>
           </div>
