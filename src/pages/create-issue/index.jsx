@@ -7,8 +7,9 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { toast } from 'react-toastify';
 import GitHub from 'github-api';
-import SimpleMDE from 'simplemde';
-import 'simplemde/dist/simplemde.min.css';
+import easyMDE from 'easymde';
+import 'easymde/dist/easymde.min.css';
+import './style-overrides.css';
 import { CircularProgress, Divider } from '@material-ui/core';
 import { store, retrieve } from '../../services/storage';
 import AutocompleteSelect from '../../components/autocomplete-select';
@@ -34,7 +35,6 @@ const styles = theme => ({
     bottom: 0,
     zIndex: 10,
     backgroundColor: 'white',
-    paddingBottom: '10px',
   },
   buttonProgress: {
     position: 'absolute',
@@ -64,7 +64,6 @@ class CreateIssue extends Component {
     title: '',
     body: '',
     timer: '',
-    error: null,
     loading: false,
     template: null,
   }
@@ -90,22 +89,23 @@ class CreateIssue extends Component {
         logger.error(err);
       });
 
-      retrieve('issueistTemplate').then(template => {
-        this.setState({template});
-        this.simpleMDE = new SimpleMDE({ 
-          element: document.getElementById('issueist-markdown-editor'), 
-          autosave: {
-            delay: 500, 
-            uniqueId: 'issueist-body', 
-            enabled: true 
-          },
-          hideIcons: ['guide'],
-          ...(template ? {initialValue: template} : {}),
-        })
-        this.simpleMDE.codemirror.on("change", () => {
-          this.handleChange({ target: { name: 'body', value: this.simpleMDE.value() } });
-        });
+    retrieve('issueistTemplate').then(template => {
+      this.setState({ template });
+      this.easyMDE = new easyMDE({
+        element: document.getElementById('issueist-markdown-editor'),
+        autosave: {
+          delay: 500,
+          uniqueId: 'issueist-body',
+          enabled: true
+        },
+        minHeight: '70px',
+        hideIcons: ['guide', 'side-by-side', 'fullscreen'],
+        ...(template ? { initialValue: template } : {}),
       })
+      this.easyMDE.codemirror.on("change", () => {
+        this.handleChange({ target: { name: 'body', value: this.easyMDE.value() } });
+      });
+    })
       .catch((err) => {
         toast.error('There was an error initializing editor. Check console for details.');
         logger.error(err);
@@ -125,10 +125,8 @@ class CreateIssue extends Component {
     const user = this.state.selectedRepository.split('/')[0];
     const repo = this.state.selectedRepository.split('/')[1];
     if (!title || !repo) {
-      this.setState({
-        error: 'Title & repo required to submit issue.',
-      });
-      this.setLoading(false)
+      toast.error('Title & repo required to submit issue.');
+      this.setLoading(false);
       return;
     }
 
@@ -141,10 +139,9 @@ class CreateIssue extends Component {
 
       this.setState({
         title: '',
-        error: null,
         body: '',
       });
-      this.simpleMDE.value(this.state.template || '');
+      this.easyMDE.value(this.state.template || '');
 
       writeStateToStorage({
         selectedRepository: this.state.selectedRepository
@@ -214,7 +211,7 @@ class CreateIssue extends Component {
   }
 
   saveEditorAsTemplate = () => {
-    this.setState({template: this.state.body});
+    this.setState({ template: this.state.body });
     store('issueistTemplate', this.state.body);
   }
 
@@ -222,64 +219,75 @@ class CreateIssue extends Component {
     const { classes } = this.props;
 
     return (
-      <div className={classes.root}>
-        <div style={{ padding: '20px' }}>
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        padding: '20px',
+        flex: '1 1 auto',
+      }}>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'auto auto',
+        }}>
           <Typography variant="body2" color="inherit">
-            Save your thoughts straight to your Github repositories issues.
+            Create Github issues.
           </Typography>
           <NewRepoDialog
             createRepo={this.createNewTodoRepo}
             buttonStyle={{ float: 'right' }}
           />
-          <div className={classes.root}>
-            <FormControl fullWidth>
-              <AutocompleteSelect
-                name="selectedRepository"
-                value={this.state.selectedRepository}
-                options={this.state.repositories}
-                onChange={this.handleChange}
-                disabled={this.state.loading}
-                placeholder="Select a repository"
-                helperText="The repository to post the issue to."
-              />
-            </FormControl>
-            <FormControl fullWidth>
-              <TextField
-                id="filled-title"
-                label="Issue Title"
-                name="title"
-                disabled={this.state.loading}
-                value={this.state.title}
-                onChange={this.handleChange}
-                margin="normal"
-                variant="filled"
-              />
-            </FormControl>
-            <Button
-              disabled={this.state.loading}
-              onClick={this.saveEditorAsTemplate}
-              className={classes.button}
-              style={{float: 'right', zIndex: 100}}
-            >
-              Save As Template
+        </div>
+        <FormControl fullWidth>
+          <AutocompleteSelect
+            name="selectedRepository"
+            value={this.state.selectedRepository}
+            options={this.state.repositories}
+            onChange={this.handleChange}
+            disabled={this.state.loading}
+            placeholder="Select a repository"
+            helperText="The repository to post the issue to."
+          />
+        </FormControl>
+        <FormControl fullWidth>
+          <TextField
+            id="filled-title"
+            label="Issue Title"
+            name="title"
+            disabled={this.state.loading}
+            value={this.state.title}
+            onChange={this.handleChange}
+            margin="normal"
+            variant="filled"
+          />
+        </FormControl>
+        <div style={{
+          flex: '1 1 auto',
+          display: 'flex',
+          flexFlow: 'column',
+        }}>
+          <Button
+            disabled={this.state.loading}
+            onClick={this.saveEditorAsTemplate}
+            className={classes.button}
+            style={{ float: 'right', zIndex: 10 }}
+          >
+            Save Below As Template
             </Button>
-            <textarea id="issueist-markdown-editor" />
-            <div className={classes.wrapper}>
-              <Divider style={{ margin: '10px 0' }} />
-              <Button
-                variant="contained"
-                color="primary"
-                disabled={this.state.loading}
-                onClick={this.submit}
-                className={classes.button}
-                fullWidth
-              >
-                Submit
+          <textarea id="issueist-markdown-editor" />
+        </div>
+        <div className={classes.wrapper}>
+          <Divider style={{ margin: '10px 0' }} />
+          <Button
+            variant="contained"
+            color="primary"
+            disabled={this.state.loading}
+            onClick={this.submit}
+            className={classes.button}
+            fullWidth
+          >
+            Submit
               </Button>
-              {this.state.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
-              <Typography color="error">{this.state.error}</Typography>
-            </div>
-          </div>
+          {this.state.loading && <CircularProgress size={24} className={classes.buttonProgress} />}
         </div>
       </div>
     );

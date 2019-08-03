@@ -1,0 +1,4 @@
+/* This file is to override styles in easyMDE, our markdown editor */
+.CodeMirror {
+  height: 100%;
+}

@@ -88,7 +88,11 @@ export default class App extends Component {
     return (
       <CssBaseline>
         <ThemeProvider theme={createMuiTheme(theme)}>
-          <div>
+          <div style={{
+            height: '100%',
+            display: 'flex',
+            flexFlow: 'column',
+          }}>
             <AppBar onClickMenu={() => this.toggleDrawer(true)} />
             {(!userIsAuthenticated) ?
               <LoginPage loading={this.state.loading} onUpdateConfig={this.onUpdateConfig} onSuccess={this.onSuccess} onFailure={this.onFailure} />
