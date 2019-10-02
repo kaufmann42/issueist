@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.4.1",
-    "@material-ui/icons": "^4.2.1",
+    "@material-ui/icons": "^4.4.3",
     "easymde": "^2.8.0",
     "github-api": "^3.3.0",
     "localforage": "^1.7.3",
