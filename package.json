@@ -26,7 +26,7 @@
     "extends": "react-app"
   },
   "devDependencies": {
-    "cpy": "^7.3.0",
+    "cpy": "^8.0.0",
     "replace-in-file": "^4.2.0",
     "rmfr": "^2.0.0",
     "zip-a-folder": "0.0.9"
