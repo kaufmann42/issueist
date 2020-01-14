@@ -5,7 +5,7 @@
   "dependencies": {
     "@material-ui/core": "^4.6.0",
     "@material-ui/icons": "^4.5.1",
-    "easymde": "^2.8.0",
+    "easymde": "^2.9.0",
     "github-api": "^3.3.0",
     "localforage": "^1.7.3",
     "react": "^16.11.0",
