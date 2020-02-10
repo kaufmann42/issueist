@@ -29,7 +29,7 @@
     "cpy": "^7.3.0",
     "replace-in-file": "^4.2.0",
     "rmfr": "^2.0.0",
-    "zip-a-folder": "0.0.9"
+    "zip-a-folder": "0.0.12"
   },
   "browserslist": {
     "production": [
